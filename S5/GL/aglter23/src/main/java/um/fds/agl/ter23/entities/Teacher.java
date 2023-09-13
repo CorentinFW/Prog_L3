@@ -18,7 +18,7 @@ public class Teacher extends UserTER {
         this.setRoles(roles);
         this.terManager=manager;
     }
-
+//quand create la co au bdd pour les sujet c'est @OneToMany
 
     public TERManager getTerManager() {
         return terManager;
