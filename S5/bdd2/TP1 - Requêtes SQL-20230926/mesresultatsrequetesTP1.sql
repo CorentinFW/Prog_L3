@@ -316,8 +316,12 @@ order by l.categorie ;
 
 prompt --- Q15 : Donner, pour chaque livre (numéro ISBN) ayant plus de deux exemplaires, le prix moyen d'achat des exemplaires.
 
-select l.isbn l.titre avg(prix) as moyenne from livre l
-join exemplaire ex on
+select l.isbn l.titre avg(prix) as moyenne
+from livre l
+join exemplaire ex on l.isbn = ex.isbn
+group by l.isbn , l.titre
+having count(*)>=(select (*)from livre l2
+    join exemplaire ex2 on l2.isbn = ex2.isbn);
 
 /*
 ISBN		TITRE						   PRIX MOYEN
