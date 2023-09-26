@@ -14,11 +14,12 @@ Attention sous ORACLE pour les marques des commentaires (le slash et l'étoile) 
 
 
 /*
-Numéro de carte étudiant : 
-Nom : 
-Prénom : 
-Date : 
+Numéro de carte étudiant : 22013398
+Nom : FAY
+Prénom : Corentin
+Date : 29/05/2002
 */
+
 
 /*
 Mise en page - Ne pas toucher
@@ -32,9 +33,7 @@ SET LINESIZE 300
 
 prompt --- Q1 : Quels sont les noms et prénoms des abonnés domiciliés à Montpellier ?
 
-/*
-VOTRE REPONSE ICI
-*/
+select NOM,PRENOM from abonne where VILLE = 'MONTPELLIER';
 
 /*
 NOM		PRENOM
@@ -55,9 +54,7 @@ ANTON		JEANNE
 
 prompt ---- Q2 : Donner toutes les informations sur les exemplaires dont le code de prêt est : « EMPRUNTABLE ».
 
-/*
-VOTRE REPONSE ICI
-*/
+select * from exemplaire where code_pret = 'EMPRUNTABLE';
 
 /*
     NUMERO DATE_ACHAT	    PRIX CODE_PRET	      ETAT	      ISBN
@@ -89,9 +86,7 @@ VOTRE REPONSE ICI
 
 prompt ---- Q3 : Donner la liste des ouvrages (ISBN, TITRE, CATEGORIE), dont le titre inclut le mot ‘ROSE’, triée par ordre décroissant de numéro.
 
-/*
-VOTRE REPONSE ICI
-*/
+select isbn,titre,categorie from livre where titre like '%ROSE%' order by isbn desc;
 
 /*
 ISBN		TITRE						   CATEGORIE
@@ -103,9 +98,7 @@ ISBN		TITRE						   CATEGORIE
 
 prompt ---- Q4 : Donner la liste des livres (leur titre et catégorie) de toutes les catégories sauf Médecine, Sciences et Loisirs. Cette liste sera donnée triée par ordre alphabétique selon la catégorie.
 
-/*
-VOTRE REPONSE ICI
-*/
+select titre,categorie from livre where categorie not in ('MEDECINE','SCIENCES','LOISIRS') order by categorie asc ;
 
 /*
 TITRE						   CATEGORIE
@@ -126,9 +119,7 @@ LE NOM DE LA ROSE				   ROMAN
 
 prompt ---- Q5 : Donner toutes les informations sur les emprunts pour lesquels la date de retour effective (attribut D_RET_REEL) n'est pas renseignée dans la base de données.
 
-/*
-VOTRE REPONSE ICI
-*/
+select * from emprunt where d_ret_reel is null ;
 
 
 /*
@@ -144,9 +135,9 @@ VOTRE REPONSE ICI
 
 prompt ---- Q6 : Donner, pour l'abonné JEAN DUPONT, la liste des exemplaires empruntés (leur numéro et la date d'emprunt), par ordre croissant de date d'emprunt.
 
-/*
-VOTRE REPONSE ICI
-*/
+select numero, d_emprunt from abonne a join emprunt e on a.num_ab = e.num_ab
+join exemplaire ex on ex.numero = e.num_ex
+where a.prenom = 'JEAN' and a.nom = 'DUPONT' order by d_emprunt;
 
 /*
     NUM_EX D_EMPRUNT
@@ -163,10 +154,10 @@ VOTRE REPONSE ICI
 
 
 prompt ------ Q7 : Donner la liste des exemplaires empruntés (leur numéro, code prêt et état) du livre de titre « LE MUR».
-
-/*
-VOTRE REPONSE ICI
-*/
+select distinct numero,code_pret, etat
+from exemplaire
+join livre on livre.isbn = exemplaire.isbn
+where titre = 'LE MUR';
 
 /*
     NUMERO CODE_PRET		ETAT
@@ -178,10 +169,15 @@ VOTRE REPONSE ICI
 
 prompt  ---- Q8 : Quels sont les exemplaires (numéro) reproduisant le même livre que l'exemplaire de numéro 4112 et dont l'état est : « BON » ?
 
+select numero
+from exemplaire ex
+where ex.isbn = (
+    select l.isbn
+    from livre l
+    join exemplaire ex2 on ex2.isbn = l.isbn
+    where ex2.numero = 4112 )
+and ex.etat = 'BON' and ex.numero != 4112;
 
-/*
-VOTRE REPONSE ICI
-*/
 
 /*
     NUMERO
@@ -194,9 +190,14 @@ VOTRE REPONSE ICI
 
 prompt ---- Q9 : Existe-t-il une catégorie pour laquelle aucun livre n'a été emprunté ?
 
-/*
-VOTRE REPONSE ICI
-*/
+select distinct categorie
+from livre
+where categorie not in (
+    select l.categorie
+    from livre l
+    join exemplaire ex on l.isbn = ex.isbn
+    join emprunt e on e.num_ex = ex.numero);
+
          
 /*
 CATEGORIE
@@ -204,11 +205,15 @@ CATEGORIE
 POEME
 */
 
-prompt ---- Q9 : Existe-t-il une catégorie pour laquelle aucun livre n'a été emprunté ? (seconde version)
+prompt ---- Q9.5 : Existe-t-il une catégorie pour laquelle aucun livre n'a été emprunté ? (seconde version)
 
-/*
-VOTRE REPONSE ICI
-*/
+select categorie
+from livre
+         minus (
+                select l.categorie
+    from livre l
+    join exemplaire ex on l.isbn = ex.isbn
+    join emprunt e on e.num_ex = ex.numero);
 
 /*
 CATEGORIE
@@ -219,9 +224,10 @@ POEME
 
 prompt ---- Q10 : Quel est le nombre d'emprunt en cours de l'abonné Renard Albert ? 
 
-/*
-VOTRE REPONSE ICI
-*/
+select count(*) as livre_en_cours
+from emprunt e
+join abonne a on e.num_ab = a.num_ab
+where nom = 'RENARD' and prenom = 'ALBERT' and d_ret_reel is null;
 
 /*
 EMPRUNTS D ALBERT RENARD
@@ -232,9 +238,9 @@ EMPRUNTS D ALBERT RENARD
 
 prompt ---- Q11 : Quelle est la catégorie de livres pour laquelle l'exemplaire le plus cher a été acheté ? 
 
-/*
-VOTRE REPONSE ICI
-*/
+select categorie from livre l
+join exemplaire e on e.isbn = l.isbn
+where prix>=(select max(prix) from exemplaire);
 
 /*
 CATEGORIE
@@ -244,9 +250,10 @@ ROMAN
 
 prompt ---- Q12 : Existe-t-il des exemplaires dans l'état « Abimé » et qui sont actuellement empruntés ? Si oui, donner leur numéro.
 
-/*
-VOTRE REPONSE ICI
-*/
+select numero
+from exemplaire ex
+join emprunt e on e.num_ex = ex.numero
+where etat = 'ABIME' and d_ret_reel is null;
 
 /*
     NUMERO
@@ -257,9 +264,8 @@ VOTRE REPONSE ICI
 
 prompt -- Q13 : Existe-t-il des mots clefs ne caractérisant aucun livre ?
 
-/*
-VOTRE REPONSE ICI
-*/
+select mot from mot_clef
+where mot not in (select mot from caracterise );
 
 /*
 MOT
@@ -270,9 +276,13 @@ NOUVELLE
 
 prompt --- Q14 : Donner le nombre d'emprunts effectués par chacun des abonnés (numéro, nom) pour chacune des catégories de livres proposées.
 
-/*
-VOTRE REPONSE ICI
-*/
+select a.num_ab,a.nom,l.categorie, count(*)
+from abonne a
+join emprunt e on e.num_ab = a.num_ab
+join exemplaire ex on ex.numero = e.num_ex
+join livre l on l.isbn = ex.isbn
+group by a.num_ab, a.nom, l.categorie
+order by l.categorie ;
 
 
 /*
@@ -306,9 +316,8 @@ VOTRE REPONSE ICI
 
 prompt --- Q15 : Donner, pour chaque livre (numéro ISBN) ayant plus de deux exemplaires, le prix moyen d'achat des exemplaires.
 
-/*
-VOTRE REPONSE ICI
-*/
+select l.isbn l.titre avg(prix) as moyenne from livre l
+join exemplaire ex on
 
 /*
 ISBN		TITRE						   PRIX MOYEN
