@@ -1,7 +1,7 @@
 from random import*
-from matplotlib import pyplot as plt 
+#from matplotlib import pyplot as plt 
 from math import *
-
+from time import *
 #question 1 : 
 def eltMajDet(T):
     for i in range(len(T)):
@@ -37,6 +37,32 @@ def tabAlea(n,a,b,k):
     shuffle(T)
     return T
 
+def tabDeb(n,a,b,k):
+    T = []
+    m = randint(a,b)
+    for i in range(k-1):
+        T.append(m)
+    for i in range(n-k):
+        T.append(randint(a,b))
+    shuffle(T)
+    print(T)
+    T.remove(m)
+    T.insert(0,m)
+    print(T)
+    return T
+
+def tabFin(n,a,b,k):
+    T = []
+    m = randint(a,b)
+    while len(T)<n-k:  
+        t1 = randint(a,b)
+        if t1 != m: 
+            T.append(t1)
+    shuffle(T)
+    for i in range(k):
+        T.append(m)
+    return T
+
 
 T = [1,2,3,4,2,2,2,7,2,8,2]
-print(tabAlea(11,1,10,6))
+print(tabFin(11,1,10,6))
