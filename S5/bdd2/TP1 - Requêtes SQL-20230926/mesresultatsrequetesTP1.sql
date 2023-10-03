@@ -322,6 +322,10 @@ join exemplaire ex on l.isbn = ex.isbn
 group by l.isbn , l.titre
 having count(*)>=(select (*)from livre l2
     join exemplaire ex2 on l2.isbn = ex2.isbn);
+/*
+
+ */
+
 
 /*
 ISBN		TITRE						   PRIX MOYEN
@@ -339,9 +343,11 @@ ISBN		TITRE						   PRIX MOYEN
 
 prompt --- Q16 : Quel est l’abonné ayant effectué le plus d’emprunts ?
 
-/*
-VOTRE REPONSE ICI
-*/
+select nom,a.num_ab, count(*) as je_compte
+from abonne a
+join emprunt e on a.num_ab = e.num_ab
+group by nom,a.num_ab
+having count(*) >=all(select count(emprunt.num_ab) from emprunt group by num_ab);
 
 /*
     NUM_AB NOM
@@ -350,13 +356,23 @@ VOTRE REPONSE ICI
     911007 MARTIN
 */
 
-prompt --- Q17 : Donnez, pour chaque livre (numéro ISBN et titre) emprunté au moins deux fois, son nombre d’exemplaires en catégorie "Exclu". 
+prompt --- Q17 : Donnez, pour chaque livre (numéro ISBN et titre) emprunté au moins deux fois,
+-- son nombre d’exemplaires en catégorie "Exclu".
 
 
-/*
-VOTRE REPONSE ICI
-*/
 
+select l.isbn, titre
+from livre l
+join exemplaire ex on ex.isbn = l.isbn
+where ex.code_pret = 'EXCLU' and l.isbn in (
+    select l2.isbn
+    from livre l2
+             join exemplaire ex2 on ex2.isbn = l2.isbn
+             join emprunt em2 on ex2.numero = em2.num_ex
+    group by  l2.isbn
+    having count(*) >=2
+    )
+group by l.isbn, titre;
 /*
 ISBN		TITRE						   Nombre exemplaires
 --------------- -------------------------------------------------- ------------------
@@ -364,15 +380,25 @@ ISBN		TITRE						   Nombre exemplaires
 
 */
 
-prompt -- Q18 : Existe t'il des homonymes (NUM_AB, NOM) parmi les abonnés ? Attention dans le résultat il ne faut ne pas dupliquer l'information. Par exemple si deux abonnés s'appellent DUPOND le résultat à obtenir est : 
+prompt -- Q18 : Existe t'il des homonymes (NUM_AB, NOM) parmi les abonnés ?
+-- Attention dans le résultat il ne faut ne pas dupliquer l'information.
+-- Par exemple si deux abonnés s'appellent DUPOND le résultat à obtenir est :
 prompt -- 1 DUPOND
 prompt -- 2 DUPOND
 
 
-/*
-VOTRE REPONSE ICI
-*/
+select a1.num_ab, a1.nom
+from abonne a1
+where a1.nom in (
+    select a2.nom
+    from abonne a2
+    where a2.num_ab <> a1.num_ab
+    );
+/*v2 : */
 
+select distinct a1.num_ab, a1.nom
+from abonne a1, abonne a2
+where a1.nom = a2.nom and a1.num_ab != a2.num_ab;
 
 /*
     NUM_AB NOM
@@ -382,13 +408,25 @@ VOTRE REPONSE ICI
     911023 DUPONT
     902043 DUPONT
 */
+/*livres jamais emprunté */
+select isbn, categorie
+from livre l
+where not exists(
+    select*
+    from exemplaire ex
+             join emprunt em on em.num_ex = ex.numero
+    where l.isbn = ex.isbn);
 
 prompt --- Q19 : Existe-t'il des catégories de livres empruntées par tous les abonnés ?
-
 prompt --- Q19 Premiere possibilité
-/*
-VOTRE REPONSE ICI
-*/
+select categorie
+from livre l
+join exemplaire ex on l.isbn = ex.isbn
+join emprunt em on em.num_ex = ex.numero
+group by categorie
+having count(distinct num_ab) = (select count(num_ab) from abonne);
+
+
 
 /*
 CATEGORIE
@@ -398,9 +436,19 @@ NOUVELLE
 
 prompt --- Q19 Deuxième possibilité
 
-/*
-VOTRE REPONSE ICI
-*/
+select distinct categorie
+from livre l
+where not exists(
+    select *
+    from abonne a
+    where not exists(
+        select *
+        from emprunt e
+                 join exemplaire ex on e.num_ex = ex.numero
+                 join livre l2 on l2.isbn = ex.isbn
+        where l.categorie = l2.categorie and a.num_ab = e.num_ab
+    )
+);
 
 /*
 CATEGORIE
@@ -409,7 +457,8 @@ NOUVELLE
 */
 
 
-prompt -- Q20 : Quels sont les livres (numéro ISBN et titre) dont tous les exemplaires valent plus de 30 euros ?
+prompt -- Q20 : Quels sont les livres (numéro ISBN et titre)
+-- dont tous les exemplaires valent plus de 30 euros ?
 
 
 prompt -- Q20 - Première possibilité : 
@@ -545,8 +594,10 @@ SQL
 BASES DE DONNEES
 */
 
-prompt --- Q23 : Quels sont les livres caractérisés par exactement les mêmes mots clefs que l'ouvrage de numéro ISBN 0-8-7707-2 ? Penser à vérifier le résultat par rapport à la requête précédente.
-
+prompt --- Q23 : Quels sont les livres caractérisés par exactement les mêmes mots clefs
+-- que l'ouvrage de numéro ISBN 0-8-7707-2 ?
+-- Penser à vérifier le résultat par rapport à la requête précédente.
+/*gb marche pas , le in non plus , double not exist avec gb*/
 
 /*
 VOTRE REPONSE ICI
