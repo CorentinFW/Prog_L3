@@ -462,9 +462,11 @@ prompt -- Q20 : Quels sont les livres (numéro ISBN et titre)
 
 
 prompt -- Q20 - Première possibilité : 
-/*
-VOTRE REPONSE ICI
-*/
+select l.isbn, titre 
+from livre l
+join exemplaire ex on ex.isbn = l.isbn 
+where ex.prix > 30
+group by l.isbn, titre;
 
 /*
 ISBN		TITRE
@@ -599,9 +601,20 @@ prompt --- Q23 : Quels sont les livres caractérisés par exactement les mêmes 
 -- Penser à vérifier le résultat par rapport à la requête précédente.
 /*gb marche pas , le in non plus , double not exist avec gb*/
 
-/*
-VOTRE REPONSE ICI
-*/
+select l.isbn 
+from livre l 
+where l.isbn <> '0-8-7707-2'
+and not exists(
+    select mot 
+    from caracterise c1 
+    where isbn = '0-8-7707-2'
+    and not exists(
+        select * 
+        from caracterise c2 
+        where c1.mot = c2.mot 
+        and c2.isbn = l.isbn
+    )
+)
 
 /*
 ISBN
