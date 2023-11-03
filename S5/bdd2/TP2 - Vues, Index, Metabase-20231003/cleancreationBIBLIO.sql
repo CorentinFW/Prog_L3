@@ -93,14 +93,16 @@ CREATE TABLE LIVRE (
 );
 
 CREATE TABLE ABONNE (
-	NUM_AB  NUMERIC(6,0),  
-	NOM VARCHAR(15)  CONSTRAINT ABNOM NOT NULL, 
-	PRENOM VARCHAR(20), 
-	VILLE VARCHAR(13), 
-	AGE NUMERIC(3,0)  ,
- 	TARIF NUMERIC(3,0) ,
- 	REDUC NUMERIC(3,0) ,
-	CONSTRAINT DOM_AGE CHECK (AGE BETWEEN 0 AND 120));
+                        NUM_AB  NUMERIC(6,0),
+                        NOM VARCHAR(15)  CONSTRAINT ABNOM NOT NULL,
+                        PRENOM VARCHAR(20),
+                        VILLE VARCHAR(13),
+                        DATE_NAI Date ,
+                        TARIF NUMERIC(3,0) ,
+                        REDUC NUMERIC(3,0) ,
+                        TYPE_AB varchar(20) check ( TYPE_AB in ('ADULTE', 'ENFANT') ) ,
+                        CAT_AB varchar(30) check ( CAT_AB in ('REGULIER', 'OCCASIONNEL', 'A PROBLEME', 'EXCLU') ),
+                        CONSTRAINT DOM_AGE CHECK (AGE BETWEEN 0 AND 120));
 
 CREATE TABLE EXEMPLAIRE (
 	NUMERO NUMERIC(4,0), 

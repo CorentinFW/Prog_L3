@@ -40,9 +40,9 @@ VOTRE REPONSE ICI
 Table modifiee.
 */
 
-prompt --- Q4 : ajout de la date de naissance des abonnés, du type parmi  {‘ADULTE’, ‘ENFANT}) et de
+/*prompt --- Q4 : ajout de la date de naissance des abonnés, du type parmi  {‘ADULTE’, ‘ENFANT}) et de
  leur catégorie dont les valeurs admissibles sont : {‘REGULIER’, ‘OCCASIONNEL’, ‘A PROBLEME’, ‘EXCLU
-’}.
+’}.*/
 
 /*
 VOTRE REPONSE ICI
@@ -53,10 +53,18 @@ Table modifiee.
 */
          
 prompt --- Q4 : describe
-
-/*
-VOTRE REPONSE ICI
-*/
+ et
+CREATE TABLE ABONNE (
+                        NUM_AB  NUMERIC(6,0),
+                        NOM VARCHAR(15)  CONSTRAINT ABNOM NOT NULL,
+                        PRENOM VARCHAR(20),
+                        VILLE VARCHAR(13),
+                        DATE_NAI Date ,
+                        TARIF NUMERIC(3,0) ,
+                        REDUC NUMERIC(3,0) ,
+                        TYPE_AB varchar(20) check ( TYPE_AB in ('ADULTE', 'ENFANT') ) ,
+                        CAT_AB varchar(30) check ( CAT_AB in ('REGULIER', 'OCCASIONNEL', 'A PROBLEME', 'EXCLU') ),
+                        CONSTRAINT DOM_AGE CHECK (AGE BETWEEN 0 AND 120));
 
 /*
 Exemple de résultat obtenu en fonction des types retenuss
