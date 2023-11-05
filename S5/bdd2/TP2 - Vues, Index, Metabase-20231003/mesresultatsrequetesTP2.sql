@@ -137,9 +137,7 @@ Table creee.
 
 prompt --- Q7 - Ajout de données dans le thésaurus
 
-/*
-VOTRE REPONSE ICI
-*/
+
 
 /* 
 Il faut au préalable insérer un tuple avec
@@ -238,7 +236,9 @@ Table créée.
 prompt --- Q14 - Création de l'index
 
 /*
-VOTRE REPONSE ICI
+CREATE TABLE TESTINDEX(
+	NOM VARCHAR(10));
+CREATE INDEX CLE_TESTINDEX ON TESTINDEX(NOM);
 */
 
 
@@ -277,8 +277,7 @@ CLE_TESTINDEX		NORMAL
 */
 
 
-prompt --- Q15 - Existe-t-il, dans la base BIBLIO, une relation pour laquelle aucun index n’a été sp
-écifié ?
+prompt --- Q15 - Existe-t-il, dans la base BIBLIO, une relation pour laquelle aucun index n’a été spécifié ?
 
 /*
 VOTRE REPONSE ICI
@@ -313,7 +312,10 @@ VOTRE REPONSE ICI
 prompt --- Q16 - Visualisation d'abonne
 
 /*
-VOTRE REPONSE ICI
+CREATE VIEW ABONNE_MONTP AS 
+SELECT NUM_AB,NOM,PRENOM FROM ABONNE WHERE VILLE = 'MONTPELLIER';
+INSERT INTO ABONNE VALUES(456,'FAY','CORENTIN','MONTPELLIER',21,21,21);
+
 */
 
 /*
@@ -331,7 +333,8 @@ VOTRE REPONSE ICI
 prompt --- Q17 : Vérifier que la vue a bien été créée dans les tables systèmes.
 
 /*
-VOTRE REPONSE ICI
+ SELECT VIEW_NAME FROM USER_VIEWS
+
 */
 
 /*
@@ -343,7 +346,8 @@ ABONNE_MONTP
 prompt --- Q18 - vue ETAT_ETAT EXEMPLAIRE
 
 /*
-VOTRE REPONSE ICI
+A COMPLETER 
+WITH CHECK OPTION;
 */
 
 /*
