@@ -40,21 +40,20 @@ VOTRE REPONSE ICI
 Table modifiee.
 */
 
-/*prompt --- Q4 : ajout de la date de naissance des abonnés, du type parmi  {‘ADULTE’, ‘ENFANT}) et de
+prompt /*--- Q4 : ajout de la date de naissance des abonnés, du type parmi  {‘ADULTE’, ‘ENFANT}) et de
  leur catégorie dont les valeurs admissibles sont : {‘REGULIER’, ‘OCCASIONNEL’, ‘A PROBLEME’, ‘EXCLU
 ’}.*/
 
-
-
+alter TABLE ABONNE add DAT_AB  date;
+alter table ABONNE add TYPE_AB varchar(20) check(TYPE_AB in ('ADULTE','ENFANT'));
+alter table ABONNE add CAT_AB varchar(20) check(CAT_AB in ('REGULIER','OCCASIONNEL','A PROBLEME','EXCLU'));
 /*
 Table modifiee.
 */
          
 prompt --- Q4 : describe
 
-/*
-VOTRE REPONSE ICI
-*/
+decribe ABONNE
 
 /*
 Exemple de résultat obtenu en fonction des types retenuss
@@ -74,9 +73,8 @@ NUM_AB 	NOT NULL 	NUMBER(6)
 
 prompt -- Q4 : mises à jour qui violent la contrainte
 
-/*
-VOTRE REPONSE ICI
-*/
+update ABONNE set CAT_AB = 'MOTHER';
+update ABONNE set CAT_AB = 'MOTHERfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 /*
 Exemples d'erreurs obtenues :
@@ -90,9 +88,7 @@ ORA-12899: valeur trop grande pour la colonne "P00000008868"."ABONNE"."TYPE_AB" 
 
 prompt --- Q5 - Augmentation de la taille des noms
 
-/*
-VOTRE REPONSE ICI
-*/
+alter table ABONNE modify NOM varchar(20);
 
 /*
 Table modifiee.
@@ -100,9 +96,7 @@ Table modifiee.
 
 prompt --- Q5 - Verification que la taille des noms a bien été prise en compte
 
-/*
-VOTRE REPONSE ICI
-*/
+decribe ABONNE
 
 /*
 Par rapport à la version précédente, le type de NOM a bien été modifié
@@ -122,9 +116,17 @@ Nom			NULL ?		Type
 
 prompt --- Q6 - Ajout des auteurs dans la base
 
-/*
-VOTRE REPONSE ICI
-*/
+create table AUTEUR (
+	NUM_AUTEUR int primary key,
+	NOM varchar(20) ,
+	PRENOM varchar(20),
+	NATIONALITE varchar(25)
+);
+create table A_ECRIT(
+	NUM_AUTEUR int references AUTEUR(NUM_AUTEUR),
+	ISBN VARCHAR(15),
+	primary key (NUM_AUTEUR,ISBN)	
+);
 
 /*
 Table creee.
@@ -148,9 +150,7 @@ INSERT INTO MOT_CLEF VALUES ('INDEX', NULL);
 
 prompt --- Q8 - Creation des dates de naissances et du type d'abonné
 
-/*
-VOTRE REPONSE ICI
-*/
+
 
 /*
 11 lignes mises a jour.
