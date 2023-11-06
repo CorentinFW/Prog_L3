@@ -605,16 +605,22 @@ select l.isbn
 from livre l 
 where l.isbn <> '0-8-7707-2'
 and not exists(
-    select mot 
-    from caracterise c1 
+    select mot
+    from caracterise c1
     where isbn = '0-8-7707-2'
     and not exists(
-        select * 
-        from caracterise c2 
-        where c1.mot = c2.mot 
+        select *
+        from caracterise c2
+        where c1.mot = c2.mot
         and c2.isbn = l.isbn
     )
 )
+GROUP BY L.ISBN
+HAVING COUNT(*)=(
+    SELECT COUNT(*)
+    FROM CARACTERISE
+    WHERE ISBN = '0-8-7707-2'
+);
 
 /*
 ISBN
