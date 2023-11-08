@@ -96,18 +96,25 @@ def elimination(F, n, b):
         Cp = []
         sat = False
         for l in C:
-            if len(l) == n and l*b >0:
+            if l == n and l*b >0:
                 sat = True
-            elif len(l) != n:
-                Cp.append[l]
+            elif l != n:
+                Cp.append(1)
         if not(sat):
             psi.append(Cp)
     return psi
 
 def sat_backtrack(F, n):
     # est dans le cours
-    # A COMPLETER       
-    #
+    if not F :
+        return [1 for i in range(n)]
+    if ([] in F):
+        return "insatisfiable"
+    for b in [1,-1]:
+        psi = elimination(F,n,b)
+        V = sat_backtrack(F,n-1)
+        if V != "insatisfiable":
+            return A + b
     return None
 
 ###############################################################################
