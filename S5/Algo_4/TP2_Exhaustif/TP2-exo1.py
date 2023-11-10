@@ -109,12 +109,12 @@ def sat_backtrack(F, n):
     if not F :
         return [1 for i in range(n)]
     if ([] in F):
-        return "insatisfiable"
-    for b in [1,-1]:
+        return None
+    for b in [-1,1]:
         psi = elimination(F,n,b)
-        V = sat_backtrack(F,n-1)
-        if V != "insatisfiable":
-            return A + b
+        A = sat_backtrack(psi,n-1)
+        if psi != None:
+            return A + [b]
     return None
 
 ###############################################################################
