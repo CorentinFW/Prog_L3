@@ -380,44 +380,44 @@ VALUES (10, 10);
 --
 
 -- Insert 1
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (1, 1);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (1, 1, 50);
 
 -- Insert 2
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (2, 2);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (2, 2, 50);
 
 -- Insert 3
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (3, 3);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (3, 3, 50);
 
 -- Insert 4
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (4, 4);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (4, 4, 50);
 
 -- Insert 5
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (5, 5);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (5, 5, 50);
 
 -- Insert 6
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (6, 6);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (6, 6, 50);
 
 -- Insert 7
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (7, 7);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (7, 7, 50);
 
 -- Insert 8
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (8, 8);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (8, 8, 50);
 
 -- Insert 9
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (9, 9);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (9, 9, 50);
 
 -- Insert 10
-INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit)
-VALUES (10, 10);
+INSERT INTO DISPOSE_PRODUIT (IdResto, IdProduit,Quantite)
+VALUES (10, 10, 50);
 
 --
 
@@ -464,84 +464,84 @@ VALUES (10, 10);
 --
 
 -- Insert 1
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (1, 1);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (1, 1, 2);
 
 -- Insert 2
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (2, 2);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (2, 2, 1);
 
 -- Insert 3
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (3, 3);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (3, 3, 1);
 
 -- Insert 4
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (4, 4);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (4, 4, 5);
 
 -- Insert 5
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (5, 5);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (5, 5, 2);
 
 -- Insert 6
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (6, 6);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (6, 6, 4);
 
 -- Insert 7
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (7, 7);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (7, 7, 2);
 
 -- Insert 8
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (8, 8);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (8, 8, 7);
 
 -- Insert 9
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (9, 9);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (9, 9, 1);
 
 -- Insert 10
-INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit)
-VALUES (10, 10);
+INSERT INTO EST_DANS_PRODUIT (IdCommande, IdProduit,QuantiteP)
+VALUES (10, 10, 1);
 
 
 --
 
 -- Insert 1
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (1, 1);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (1, 1, 2);
 
 -- Insert 2
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (2, 2);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (2, 2, 2);
 
 -- Insert 3
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (3, 3);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (3, 3, 2);
 
 -- Insert 4
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (4, 4);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (4, 4, 2);
 
 -- Insert 5
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (5, 5);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (5, 5, 2);
 
 -- Insert 6
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (6, 6);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (6, 6, 2);
 
 -- Insert 7
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (7, 7);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (7, 7, 2);
 
 -- Insert 8
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (8, 8);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (8, 8, 2);
 
 -- Insert 9
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (9, 9);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (9, 9, 2);
 
 -- Insert 10
-INSERT INTO EST_DANS_MENU (IdCommande, IdMenu)
-VALUES (10, 10);
+INSERT INTO EST_DANS_MENU (IdCommande, IdMenu, QuantiteM)
+VALUES (10, 10, 2);
