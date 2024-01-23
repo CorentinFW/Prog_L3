@@ -1,0 +1,16 @@
+1 : un afd , un afnd ,grammaire regulier, expression reguliere
+
+2 : un langage de prog n'est pas regulier(l'analyse syntaxique doit utliser des automates a pile)
+
+3: comme ceci = X->(X)X|e(epsilon)
+
+4:[] optionnelle 
+  {|} alternative
+  [|] choix optionnel
+  MAJUSCULE mots-clef reservere au langage
+  minuscules nom donnée par user, variable 
+  ... répétition
+
+5: select 5 respecte la grammaire et la syntaxe
+  elles sont ou les ; ?
+  respecte la grammaire et la syntaxique
