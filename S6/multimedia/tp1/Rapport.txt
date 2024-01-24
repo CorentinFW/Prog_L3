@@ -1,0 +1,23 @@
+Exo1 : 
+nous avons compiler test_grey.cpp avec : g++ -Wall test_grey.cpp -o test_grey, puis compiler comme suit 
+./test_grey nom_fichier nouveau_nom valeur_des_nuance_de_gris
+on en a fait trois 
+(puis je me suis amuser a faire pareille avec l'image officier de dbx2)
+
+Exo2: 
+j'ai créer deux test_grey different, l'un avec 2 parametre , donc 3 pallette de gris(0,128,255), 
+et un avec 4 parametre , donc 4 pallette de gris 
+
+Exo 3 :
+on a creer histo soit un prog qui renvoie le nombre de pixel qu'il y a entre 0 et 255 
+ensuite on fait ./histo 01.pgm>>histo.dat , cela recupere les données printf et ça les met dans le fichier
+ensuite dans le terminal on met gnuplot et on tape  : plot "histo.dat" with line pour afficher l'histogramme
+
+Exo 4 
+on a fait profil soit on choisis si c'est une colone ou une ligne puis le num de cette col ou ligne , 
+ensuite on affiche tout les valeurs (nuance de gris) associer 
+
+Exo 5 
+a partir de test_couleur on a la mm chose que test_grey mais avec les rgb 
+
+Exo 6 
