@@ -28,10 +28,10 @@ int main(int argc, char* argv[])
    int nTaille3 = nTaille * 3;
    allocation_tableau(ImgIn, OCTET, nTaille3);
    lire_image_ppm(cNomImgLue, ImgIn, nH * nW);
-   allocation_tableau(ImgOut, OCTET, nTaille3);
-	int Rouge[nTaille]
-	int Vert[nTaille]
-	int Bleue[nTaille]
+   /*allocation_tableau(ImgOut, OCTET, nTaille3);*/
+	int Rouge[nTaille];
+	int Vert[nTaille];
+	int Bleue[nTaille];
     int compteur = 0;
    for (int i=0; i < nTaille3; i+=3)
      {
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
        Bleue[compteur] = nB;
      }
     for(int i=0;i<nTaille;i++){
-        printf("%d %d %d %d\n",i,Rouge[i],Vert[i],Bleue[i])
+        printf("%d %d %d %d\n",i,Rouge[i],Vert[i],Bleue[i]);
     }
 
    free(ImgIn);
