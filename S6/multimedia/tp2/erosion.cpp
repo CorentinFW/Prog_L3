@@ -31,6 +31,11 @@ int main(int argc, char* argv[])
    //  if ( ImgIn[i] < S) ImgOut[i]=0; else ImgOut[i]=255;
    //  }
 
+for (int i=0; i < nH; i++){
+        for (int j=0; j < nW; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j];
+        }
+    }
 
  for (int i=0; i < nH; i++)
    for (int j=0; j < nW; j++)

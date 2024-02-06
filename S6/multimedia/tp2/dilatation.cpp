@@ -25,15 +25,17 @@ int main(int argc, char* argv[])
    allocation_tableau(ImgIn, OCTET, nTaille);
    lire_image_pgm(cNomImgLue, ImgIn, nH * nW);
    allocation_tableau(ImgOut, OCTET, nTaille);
-	
-   //   for (int i=0; i < nTaille; i++)
-   // {
-   //  if ( ImgIn[i] < S) ImgOut[i]=0; else ImgOut[i]=255;
-   //  }
 
 
- for (int i=0; i < nH; i++)
-   for (int j=0; j < nW; j++)
+for (int i=0; i < nH; i++){
+        for (int j=0; j < nW; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j];
+        }
+    }
+
+
+ for (int i=1; i < nH-1; i++)
+   for (int j=1; j < nW-1; j++)
      {
        if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
        || ImgIn[(i-1)*nW+j+1] == 0
