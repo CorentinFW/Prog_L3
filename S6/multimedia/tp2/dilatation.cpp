@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
  for (int i=0; i < nH; i++)
    for (int j=0; j < nW; j++)
      {
-       if (ImgIn[i*nW+j] == 255 || ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
+       if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
        || ImgIn[(i-1)*nW+j+1] == 0
        || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) ImgOut[i*nW+j]=0;
      }
