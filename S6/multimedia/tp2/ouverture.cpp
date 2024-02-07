@@ -33,21 +33,6 @@ for (int i=0; i < nH; i++){
         }
     }
 
-
- for (int i=1; i < nH-1; i++)
-   for (int j=1; j < nW-1; j++)
-     {
-       if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
-       || ImgIn[(i-1)*nW+j+1] == 0
-       || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) ImgOut[i*nW+j]=0;
-     }
-
-for (int i=0; i < nH; i++){
-        for (int j=0; j < nW; j++){
-            ImgOut[i*nW+j]=ImgIn[i*nW+j];
-        }
-    }
-
  for (int i=1; i < nH-1; i++)
    for (int j=1; j < nW-1; j++)
      {
@@ -59,6 +44,23 @@ for (int i=0; i < nH; i++){
        }
      }
      
+
+for (int i=0; i < nH; i++){
+        for (int j=0; j < nW; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j];
+        }
+    }
+
+
+ for (int i=1; i < nH-1; i++)
+   for (int j=1; j < nW-1; j++)
+     {
+       if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
+       || ImgIn[(i-1)*nW+j+1] == 0
+       || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) ImgOut[i*nW+j]=0;
+     }
+
+
 
    ecrire_image_pgm(cNomImgEcrite, ImgOut,  nH, nW);
    free(ImgIn); free(ImgOut);

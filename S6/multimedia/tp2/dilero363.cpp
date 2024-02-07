@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
    lire_image_pgm(cNomImgLue, ImgIn, nH * nW);
    allocation_tableau(ImgOut, OCTET, nTaille);
 
-
+for(int x = 0; x<3;x++){
 for (int i=0; i < nH; i++){
         for (int j=0; j < nW; j++){
             ImgOut[i*nW+j]=ImgIn[i*nW+j];
@@ -41,7 +41,8 @@ for (int i=0; i < nH; i++){
        || ImgIn[(i-1)*nW+j+1] == 0
        || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) ImgOut[i*nW+j]=0;
      }
-
+}
+for(int y = 0;y<6;y++){
 for (int i=0; i < nH; i++){
         for (int j=0; j < nW; j++){
             ImgOut[i*nW+j]=ImgIn[i*nW+j];
@@ -58,8 +59,24 @@ for (int i=0; i < nH; i++){
         //printf("%d \n",i);
        }
      }
-     
+}
+//2em dilatation 
+for(int z = 0; z<3;z++){
+for (int i=0; i < nH; i++){
+        for (int j=0; j < nW; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j];
+        }
+    }
 
+
+ for (int i=1; i < nH-1; i++)
+   for (int j=1; j < nW-1; j++)
+     {
+       if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
+       || ImgIn[(i-1)*nW+j+1] == 0
+       || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) ImgOut[i*nW+j]=0;
+     }
+}
    ecrire_image_pgm(cNomImgEcrite, ImgOut,  nH, nW);
    free(ImgIn); free(ImgOut);
 
