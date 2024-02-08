@@ -31,33 +31,25 @@ int main(int argc, char* argv[])
    allocation_tableau(ImgOut, OCTET, nTaille);
 
 
- for (int i=1; i < nH-1; i++)
-   for (int j=1; j < nW-1; j++)
+for (int i=1; i < nH-1; i++){
+        for (int j=1; j < nW-1; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j];
+        }
+    }
+
+ for (int i=0; i < nH; i++)
+   for (int j=0; j < nW; j++)
      {
-       if ((ImgIn[i*nW+j+1] == 255 || ImgIn[i*nW+j-1] == 255 || ImgIn[(i+1)*nW+j] == 255 || ImgIn[(i-1)*nW+j] == 255 
-       || ImgIn[(i-1)*nW+j+1] == 255
-       || ImgIn[(i-1)*nW+j-1] == 255 || ImgIn[(i+1)*nW+j+1] == 255|| ImgIn[(i+1)*nW+j-1] == 255)
-       &&
-       (ImgIn2[i*nW+j+1] == 255 || ImgIn2[i*nW+j-1] == 255 || ImgIn2[(i+1)*nW+j] == 255 || ImgIn2[(i-1)*nW+j] == 255 
-       || ImgIn2[(i-1)*nW+j+1] == 255
-       || ImgIn2[(i-1)*nW+j-1] == 255 || ImgIn2[(i+1)*nW+j+1] == 255|| ImgIn2[(i+1)*nW+j-1] == 255)
-       )
-       {
-        ImgOut[i*nW+j]=255;
-        //printf("%d \n",i);
-       }
-       if ((ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
+       if (ImgIn[i*nW+j+1] == 0 || ImgIn[i*nW+j-1] == 0 || ImgIn[(i+1)*nW+j] == 0 || ImgIn[(i-1)*nW+j] == 0 
        || ImgIn[(i-1)*nW+j+1] == 0
-       || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0 || ImgIn[(i+1)*nW+j-1] == 0) 
-       &&
-       (ImgIn2[i*nW+j+1] == 0 || ImgIn2[i*nW+j-1] == 0 || ImgIn2[(i+1)*nW+j] == 0 || ImgIn2[(i-1)*nW+j] == 0 
-       || ImgIn2[(i-1)*nW+j+1] == 0
-       || ImgIn2[(i-1)*nW+j-1] == 0 || ImgIn2[(i+1)*nW+j+1] == 0 || ImgIn2[(i+1)*nW+j-1] == 0)
-       )
-       ImgOut[i*nW+j]=255;
-       else ImgOut[i*nW+j]=0;
+       || ImgIn[(i-1)*nW+j-1] == 0 || ImgIn[(i+1)*nW+j+1] == 0|| ImgIn[(i+1)*nW+j-1] == 0) ImgIn2[i*nW+j]=0;
      }
 
+for (int i=1; i < nH-1; i++){
+        for (int j=1; j < nW-1; j++){
+            ImgOut[i*nW+j]=ImgIn[i*nW+j] - ImgIn2[i*nW+j];
+        }
+    }
 
    ecrire_image_pgm(cNomImgEcrite, ImgOut,  nH, nW);
    free(ImgIn); free(ImgIn2);free(ImgOut);

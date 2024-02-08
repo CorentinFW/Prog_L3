@@ -1,0 +1,16 @@
+Durant ce tp nous avons du faire les fonction eroder et dilatation qui sont la base de tous.
+en effet l'erotion permet de rendre tout noir les objets ( qui ressorte noir)
+alors que dilatation ces le fond blanc
+les deux se base sur des images binairs seuilé
+on pu constater une reduction des parasites dans le fond et objets grace a ces fonctions
+
+ensuite nous avons fait les fonctions fermetures et ouvertures 
+fermetures permet de dilater puis eroder 
+ouvertures permet de eroder puis dilater 
+cela permet une plus grande precision
+
+pour finir sur les images binairs seuilé nous avons fait la fonction différence 
+qui en prenant une image gris et une image seuilé ,qui ont la méme image d'origie, nous généront une image 
+qui est le contours de l'objet sur l'image ( je n'ai pas essayer sur des images possédant plusieur objets)
+
+il me reste le bonus a faire quand j'aurais la foi 
