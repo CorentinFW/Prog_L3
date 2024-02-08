@@ -1,5 +1,6 @@
 // test_couleur.cpp : Seuille une image en niveau de gris
-
+//la soluce (merci antho) tu init , si imgin eroder imgin2 = 0 
+//puis imgout = imgin - imgin2
 #include <stdio.h>
 #include "image_ppm.h"
 
