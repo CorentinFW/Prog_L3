@@ -44,7 +44,11 @@ int main(int argc, char *argv[]) {
   // avant de tester.
   
   /* Etape 2 : Nommer la socket du client */
-  
+   struct sockaddr_in ad;
+   ad.sin_family = AF_INET;
+   ad.sin_addr.s_addr = INADDR_ANY;
+   ad.sin_port= hton((short)31470);
+   int res = bind(ds,(struct sockaddr*)&ad,sizeof(ad));
   /* Etape 3 : Désigner la socket du serveur */
   
   /* Etape 4 : envoyer un message au serveur  (voir sujet pour plus de détails)*/
