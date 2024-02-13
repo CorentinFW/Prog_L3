@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
       printf("probleme de connection \n");
    }
    else{
-      printf("connection réussi");
+      printf("connection réussi\n");
    }
 
   /* Etape 3 : Désigner la socket du serveur */
@@ -66,15 +66,17 @@ int main(int argc, char *argv[]) {
    sockDistante.sin_port = htons(atoi(argv[2])) ;
    
   /* Etape 4 : envoyer un message au serveur  (voir sujet pour plus de détails)*/
-  
-   char m[200];
+  //
+   char m[1500];
    fgets(m,sizeof(m),stdin);
    int sendtest = send(ds,m,strlen(m),0);
-   if (sendtest == -1){
+   int sendtest2 = send(ds,m,strlen(m),0);
+   printf("%d\n",sendtest);
+   if (sendtest == -1 && sendtest2 == -1){
       printf("probleme envoie de msg client au serveur\n");
    }
    else{
-      printf("msg bien envoyer");
+      printf("msg bien envoyer\n");
    }
    
    
@@ -85,7 +87,7 @@ int main(int argc, char *argv[]) {
       printf("probleme reçu de msg du serveur\n");
    }
    else{
-      printf("msg bien reçu");
+      printf("msg bien reçu\n");
    }
    printf("reponse : %s \n", r);
 
