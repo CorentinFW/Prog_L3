@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
      paramètres, l'exécution doit être arrétée, autrement, elle
      aboutira à des erreurs.*/
   if (argc != 4){
-    printf("utilisation : %s ip_serveur port_serveur port_client\n", argv[0]);
+    printf("utilisation : %s ip_serveur port_serveur port_client nombre_d'iteration\n", argv[0]);
     exit(1);
   }
 
@@ -69,29 +69,27 @@ int main(int argc, char *argv[]) {
   //
    char m[1500];
    fgets(m,sizeof(m),stdin);
+   int nbenvoie = 0;
+   int Tall = 0;
+   int supposeSend = 0;
+   int cpt;
+   scanf("%d",&cpt);
+   for(int i = 0;i<cpt;i++){
+   
    int sendtest = send(ds,m,strlen(m),0);
-   int sendtest2 = send(ds,m,strlen(m),0);
-   printf("%d\n",sendtest);
-   if (sendtest == -1 && sendtest2 == -1){
+   nbenvoie += 1;
+   Tall += strlen(m);
+   supposeSend += sendtest; 
+
+   printf("%d\n",supposeSend);
+   if (sendtest == -1){
       printf("probleme envoie de msg client au serveur\n");
    }
    else{
       printf("msg bien envoyer\n");
    }
-   
-   
-  /* Etape 5 : recevoir un message du serveur (voir sujet pour plus de détails)*/
-   char r[255];
-   int rectest = recv(ds, r,sizeof(r),0);
-   if (rectest == -1){
-      printf("probleme reçu de msg du serveur\n");
    }
-   else{
-      printf("msg bien reçu\n");
-   }
-   printf("reponse : %s \n", r);
-
-
+   
   /* Etape 6 : fermer la socket (lorsqu'elle n'est plus utilisée)*/
   
   int c = close(ds);

@@ -61,19 +61,26 @@ int main(int argc, char *argv[]) {
   /* Etape 4 : recevoir un message du client (voir sujet pour plus de détails)*/
    struct sockaddr_in adC;
    socklen_t lgC = sizeof(struct sockaddr_in);
-   char load[200];
-   scanf("%s",load);
    int client = accept(ds,(struct sockaddr *)&adC,&lgC);
-   char msg[200];
+   int total = 0;
+   int nbrecv = 0;
+   int msgC;
+   do{
+   char msg[4000];
    int msgC = recv(client,msg,sizeof(msg),0);
-   printf("reçu : %s \n",msg);
-  /* Etape 5 : envoyer un message au client (voir sujet pour plus de détails)*/
-   printf("1\n");
-   char msgS[255];
-   fgets(msgS,sizeof(msgS),stdin);
-   printf("2\n");
-   send(client,&msgS,sizeof(msgS),0);
-   printf("3\n");
+   if (msgC == -1){
+      printf("probleme de reception \n");
+      exit(1);
+   }
+
+
+   total += msgC;
+   nbrecv += 1;
+   printf("reçu : %s",msg);
+   printf("taille : %d ",msgC);
+
+   }while(msgC>1);
+
   /* Etape 6 : fermer la socket (lorsqu'elle n'est plus utilisée)*/
   
   int c = close(ds);
