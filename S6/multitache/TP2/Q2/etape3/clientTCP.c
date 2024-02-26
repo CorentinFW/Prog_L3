@@ -68,11 +68,14 @@ int main(int argc, char *argv[]) {
   /* Etape 4 : envoyer un message au serveur  (voir sujet pour plus de détails)*/
   //
    char m[1500];
+   printf("noter votre message \n");
    fgets(m,sizeof(m),stdin);
    int nbenvoie = 0;
    int Tall = 0;
    int supposeSend = 0;
    int cpt;
+      printf("Combien d'envoi voulez vous envoyer \n");
+
    scanf("%d",&cpt);
    for(int i = 0;i<cpt;i++){
    

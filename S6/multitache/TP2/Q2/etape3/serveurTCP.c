@@ -65,21 +65,23 @@ int main(int argc, char *argv[]) {
    int total = 0;
    int nbrecv = 0;
    int msgC;
-   do{
    char msg[4000];
-   int msgC = recv(client,msg,sizeof(msg),0);
-   if (msgC == -1){
-      printf("probleme de reception \n");
-      exit(1);
-   }
+
+   do{
+      
+      msgC = recv(client,&msg,sizeof(msg),0);
+      if (msgC == -1){
+         printf("probleme de reception \n");
+         exit(1);
+      }
 
 
-   total += msgC;
-   nbrecv += 1;
-   printf("reçu : %s",msg);
-   printf("taille : %d ",msgC);
+      total += msgC;
+      nbrecv += 1;
+      printf("reçu : %s",msg);
+      printf("taille : %d ",msgC);
 
-   }while(msgC>1);
+   }while(msgC!=0);
 
   /* Etape 6 : fermer la socket (lorsqu'elle n'est plus utilisée)*/
   
