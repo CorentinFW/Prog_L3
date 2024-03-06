@@ -45,6 +45,44 @@ int main(int argc, char *argv[]) {
   
   /* Etape 2 : Nommer la socket du client */
   
+  /*thx to pablo */
+  int sendTCP(int sock, void *msg, int sizeMsg) {
+  int nbTotalOctetsEnvoyes = 0;
+
+  while (nbTotalOctetsEnvoyes < sizeMsg) {
+    int resSend = send(sock, msg + nbTotalOctetsEnvoyes, sizeMsg - nbTotalOctetsEnvoyes, 0);
+    if (resSend <= 0) {
+      return resSend;
+    }
+    nbTotalOctetsEnvoyes += resSend;
+  }
+
+  return 1;
+}
+
+
+int nbrecv =0;
+int sendTCPdebug(int sock, void *msg, int sizeMsg, int *nbSend, int *nbOctets) {
+  int nbTotalOctetsEnvoyes = 0;
+  int i = 0;
+
+  while (nbTotalOctetsEnvoyes < sizeMsg) {
+    int resSend = send(sock, msg + nbTotalOctetsEnvoyes, sizeMsg - nbTotalOctetsEnvoyes, 0);
+    if (resSend <= 0) {
+      return resSend;
+    }
+    nbTotalOctetsEnvoyes += resSend;
+    i++;
+  }
+
+  *nbSend = i;
+  *nbOctets = nbTotalOctetsEnvoyes;
+
+  return 1;
+}
+
+
+
    struct sockaddr_in ad ;
    ad.sin_family = AF_INET ;
    inet_pton(AF_INET,argv[1],&(ad.sin_addr));

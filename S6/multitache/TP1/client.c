@@ -52,7 +52,8 @@ int main(int argc, char *argv[]) {
    int res = bind(ds, (struct sockaddr*)&ad, sizeof(ad)) ;
 
    if(res == -1){
-      printf("Erreur dans le nommage de la socket. \n");
+      perror("Erreur dans le nommage de la socket.");
+      exit(1);
    }
 
   /* Etape 3 : Désigner la socket du serveur */
@@ -68,6 +69,11 @@ int main(int argc, char *argv[]) {
    char msg[20];
    scanf("%s", msg);
    res = sendto(ds, &msg, strlen(msg)+1, 0, (struct sockaddr *)&sockDistante, lgAdr) ;
+   /*
+   int * msg[20];
+   scanf("%s", msg);
+   res = sendto(ds, &msg, sizeof(msg)+1, 0, (struct sockaddr *)&sockDistante, lgAdr) ;*/
+
 
    if(res == -1){
       printf("Erreur dans l'envoi du message");

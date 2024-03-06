@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
    char msg[200];
    int msgC = recv(client,msg,sizeof(msg),0);
    printf("reçu : %s \n",msg);
+
   /* Etape 5 : envoyer un message au client (voir sujet pour plus de détails)*/
    printf("1\n");
    char msgS[255];
@@ -74,6 +75,7 @@ int main(int argc, char *argv[]) {
    printf("2\n");
    send(client,&msgS,sizeof(msgS),0);
    printf("3\n");
+   
   /* Etape 6 : fermer la socket (lorsqu'elle n'est plus utilisée)*/
   
   int c = close(ds);
