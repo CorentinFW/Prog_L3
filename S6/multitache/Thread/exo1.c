@@ -3,25 +3,24 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <iostream>
+//#include <iostream>
 #include <pthread.h>
-
+#include "calcul.h"
 
 struct paramsFonctionThread {
 
   int idThread;
-
-  // si d'autres paramètres, les ajouter ici.
+  int *VarGloPro;
+  pthread_mutex_t *Verrou;
 
 };
-
 
 void * fonctionThread (void * params){
 
   struct paramsFonctionThread * args = (struct paramsFonctionThread *) params;
 
-  // a compléter
-  ...
+  
+  pthread_exit(NULL);
 }
 
 
@@ -31,34 +30,32 @@ int main(int argc, char * argv[]){
     printf("utilisation: %s  nombre_threads  \n", argv[0]);
     return 1;
   }     
-
-  
   pthread_t threads[atoi(argv[1])];
+  int VariablePartage;
+  pthread_mutex_t mutex;
+  pthread_mutex_init(&mutex,NULL);
 
-  ...
-
- 
+  struct paramsFonctionThread args[atoi(argv[1])];
+  // crï¿½ation des threards 
   
-  // création des threards 
   for (int i = 0; i < atoi(argv[1]); i++){
-
-    // Le passage de paramètre est fortement conseillé (éviter les
-    // variables globles).
-
-     ... // compléter pour initialiser les paramètres
-    if (pthread_create(&threads[i], NULL,..., ...) != 0){
+    args[i].idThread = i;
+    args[i].VarGloPro = &VariablePartage;
+    args[i].Verrou = &mutex;
+    if (pthread_create(&threads[i], NULL,fonctionThread, &args[i]) != 0){
       perror("erreur creation thread");
       exit(1);
     }
+    int res = pthread_join(threads[i], NULL);
+    //exit(1); = seul le 1er thread sera afficher ( et surement crÃ©er)
   }
 
-
 // garder cette saisie et modifier le code en temps venu.
-  char c; 
-  printf("saisir un caractère \n");
-  fgets(m, 1, stdin);
-
- ... compléter
+  // char c; 
+  // char m[400];
+  // printf("saisir un caractÃ©re \n");
+  // fgets(m, 1, stdin);
+  // printf("le m est : %s",m);
 
   return 0;
  
