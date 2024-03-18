@@ -18,8 +18,9 @@ struct paramsFonctionThread {
 void * fonctionThread (void * params){
 
   struct paramsFonctionThread * args = (struct paramsFonctionThread *) params;
-
-  
+  pthread_mutex_lock(args->Verrou);
+  (*(args->VarGloPro)) += 1;
+  pthread_mutex_unlock(args->Verrou);
   pthread_exit(NULL);
 }
 
@@ -31,7 +32,7 @@ int main(int argc, char * argv[]){
     return 1;
   }     
   pthread_t threads[atoi(argv[1])];
-  int VariablePartage;
+  int VariablePartage = 0;
   pthread_mutex_t mutex;
   pthread_mutex_init(&mutex,NULL);
 
@@ -39,6 +40,7 @@ int main(int argc, char * argv[]){
   // cr�ation des threards 
   
   for (int i = 0; i < atoi(argv[1]); i++){
+    printf("j'existe \n");
     args[i].idThread = i;
     args[i].VarGloPro = &VariablePartage;
     args[i].Verrou = &mutex;
@@ -49,6 +51,7 @@ int main(int argc, char * argv[]){
     int res = pthread_join(threads[i], NULL);
     //exit(1); = seul le 1er thread sera afficher ( et surement créer)
   }
+  printf("la varglo = %d \n",VariablePartage);
 
 // garder cette saisie et modifier le code en temps venu.
   // char c; 

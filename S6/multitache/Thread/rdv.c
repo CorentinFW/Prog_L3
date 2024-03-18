@@ -1,4 +1,4 @@
-#include <iostream>
+#include <stdio.h>
 #include <sys/types.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -6,36 +6,35 @@
 
 struct predicatRdv {
 
-// regrouoes les donnée partagées entres les threads participants aux RdV :
+// regrouoes les donnï¿½e partagï¿½es entres les threads participants aux RdV :
 
-  ...
+  pthread_mutex_t verrou;
+  pthread_cond_t cond;
+  int *compteur;
+  int nbThreads;
 };
 
 struct params {
 
-  // structure pour regrouper les paramètres d'un thread. 
-
-  int idThread; // un identifiant de thread, de 1 à N (N le nombre
-		// total de theads secondaires
+  int idThread;
   struct predicatRdv * varPartagee;
 
 
 };
 
-// fonction associée a chaque thread participant au RdV.
+// fonction associï¿½e a chaque thread participant au RdV.
 
 void * participant (void * p){ 
 
   struct params * args = (struct params *) p;
   struct predicatRdv * predicat = args -> varPartagee;
-  ...
-
   // simulation d'un long calcul pour le travail avant RdV
-  calcul (args -> idThread + rand() % 10); // c'est un exemple.
+
+  calcul(args -> idThread + rand() % 10); // c'est un exemple.
 
   // RdV 
-  ...
-  while (...) {  // attention : le dernier arrivé ne doit pas attendre. Il doit réveiller tous les autres.
+  pthread_mutex_lock(args->verrou);
+  while (...) {  // attention : le dernier arrivï¿½ ne doit pas attendre. Il doit rï¿½veiller tous les autres.
    attente
   }
 
@@ -45,7 +44,7 @@ void * participant (void * p){
 
 
   ...
-  pthread_exit(NULL); // fortement recommandé.
+  pthread_exit(NULL); // fortement recommandï¿½.
 }
 
 
@@ -54,8 +53,8 @@ void * participant (void * p){
 int main(int argc, char * argv[]){
   
   if (argc!=2) {
-    cout << " argument requis " << endl;
-    cout << "./prog nombre_Threads" << endl;
+    printf(" argument requis ");
+    printf("./prog nombre_Threads");
     exit(1);
   }
 
@@ -68,7 +67,7 @@ int main(int argc, char * argv[]){
 
   srand(atoi(argv[1]));  // initialisation de rand pour la simulation de longs calculs
  
-  // création des threards 
+  // crï¿½ation des threards 
   for (int i = 0; i < atoi(argv[1]); i++){
     tabParams[i].idThread = ...;
     tabParams[i].varPartagee = ...; 
@@ -83,7 +82,7 @@ int main(int argc, char * argv[]){
   for (int i = 0; i < atoi(argv[1]); i++){
   ...
     }
-  cout << "thread principal : fin de tous les threads secondaires" << endl;
+  printf("thread principal : fin de tous les threads secondaires");
 
   // terminer "proprement". 
   ...
