@@ -14,6 +14,7 @@
 // purpose.
 // -------------------------------------------
 
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -81,11 +82,41 @@ static bool mouseMovePressed = false;
 static bool mouseZoomPressed = false;
 static int lastX=0, lastY=0, lastZoom=0;
 static bool fullScreen = false;
-
+float nY = 20;
+float nX = 20;
 //To complete
-void setUnitSphere( Mesh & o_mesh, int nX=20, int nY=20 )
+void setUnitSphere( Mesh & o_mesh, int nX, int nY )
 {
-
+    o_mesh.normals.clear();
+    o_mesh.vertices.clear();
+    o_mesh.triangles.clear();
+    //pour remplir : o_mesh.vertices.push_back(Vec3(0.,0.,0.))
+    //o_mesh.triangles.push_back(Vec(0.,0.,0.))
+    for(int i = 0;i<=nX;i++){
+        float theta = ((2.0 * M_PI) /nX)* i;
+    for(int j = 0;j<=nY;j++){
+        float phi = ((M_PI/nY)*j)-(M_PI/2);
+        float x = cos(theta) * cos(phi);
+        float y = sin(theta) * cos(phi);
+        float z = sin(phi);
+        //printf("x = %f, y = %f , z , %f",x,y,z);
+        o_mesh.vertices.push_back(Vec3(x,y,z));
+        o_mesh.normals.push_back(Vec3(x,y,z));
+    }
+    
+    }
+    for(int i = 0;i<nX;i++){
+    for(int j = 0;j<nY;j++){
+        float v0 = i*(nX+1) +j;
+        float v1 = v0 + 1;
+        float v2 = (i+1)*(nX+1) + j;
+        float v3 = v2 + 1;
+        
+        o_mesh.triangles.push_back(Triangle(v0,v2,v1));
+        o_mesh.triangles.push_back(Triangle(v1,v2,v3));
+    }
+    
+    }
 
 }
 
@@ -259,7 +290,7 @@ void drawVertices( Mesh const & i_mesh ) {
 }
 
 
-void drawTriangleMesh( Mesh const & i_mesh ) {
+void drawTriangleMesh( Mesh const & i_mesh ) {// le triangle d'origine 
 
     if( i_mesh.triangles.size() > 0 ){
         if( i_mesh.normals.size() > 0 ){
@@ -340,7 +371,7 @@ void draw () {
     }
 
     if( display_loaded_mesh ){
-        glColor3f(0.8,0.8,1);
+        glColor3f(0.5,0.5,0);
         drawTriangleMesh(mesh);
     }
 
@@ -390,6 +421,7 @@ void idle () {
 }
 
 void key (unsigned char keyPressed, int x, int y) {
+    
     switch (keyPressed) {
     case 'f':
         if (fullScreen == true) {
@@ -419,8 +451,20 @@ void key (unsigned char keyPressed, int x, int y) {
         display_unit_sphere = !display_unit_sphere;
         break;
 
+    case '+':
+        nX++;
+        nY++;
+        setUnitSphere( unit_sphere, nX, nY );
+        break;
+    case '-':
+        nX--;
+        nY--;
+        setUnitSphere( unit_sphere, nX, nY );
+        break;
+
     default:
         break;
+        
     }
     idle ();
 }
@@ -500,7 +544,7 @@ int main (int argc, char ** argv) {
     //Uncomment to see other meshes
     //openOFF("data/elephant_n.off", mesh.vertices, mesh.normals, mesh.triangles);
 
-    setUnitSphere( unit_sphere );
+    setUnitSphere( unit_sphere, nX, nY );
 
     glutMainLoop ();
     return EXIT_SUCCESS;
