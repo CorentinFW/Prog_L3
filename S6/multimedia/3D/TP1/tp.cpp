@@ -92,9 +92,11 @@ void setUnitSphere( Mesh & o_mesh, int nX, int nY )
     o_mesh.triangles.clear();
     //pour remplir : o_mesh.vertices.push_back(Vec3(0.,0.,0.))
     //o_mesh.triangles.push_back(Vec(0.,0.,0.))
-    for(int i = 0;i<=nX;i++){
+    //pour l'ancienne version suivre les nota
+    //nota remette les = dans les for
+    for(int i = 0;i<nX;i++){
         float theta = ((2.0 * M_PI) /nX)* i;
-    for(int j = 0;j<=nY;j++){
+    for(int j = 0;j<nY;j++){
         float phi = ((M_PI/nY)*j)-(M_PI/2);
         float x = cos(theta) * cos(phi);
         float y = sin(theta) * cos(phi);
@@ -105,8 +107,9 @@ void setUnitSphere( Mesh & o_mesh, int nX, int nY )
     }
     
     }
-    for(int i = 0;i<nX;i++){
-    for(int j = 0;j<nY;j++){
+    //nota enleve le -1
+    for(int i = 0;i<nX-1;i++){
+    for(int j = 0;j<nY-1;j++){
         float v0 = i*(nX+1) +j;
         float v1 = v0 + 1;
         float v2 = (i+1)*(nX+1) + j;
@@ -115,7 +118,15 @@ void setUnitSphere( Mesh & o_mesh, int nX, int nY )
         o_mesh.triangles.push_back(Triangle(v0,v2,v1));
         o_mesh.triangles.push_back(Triangle(v1,v2,v3));
     }
-    
+    //nota met en commentaire 
+    ///*
+        float v0 = 0;
+        float v1 = 1;
+        float v2 = (1)*(nX+1);
+        float v3 = v2 + 1;
+        o_mesh.triangles.push_back(Triangle(v0,v2,v1));
+        o_mesh.triangles.push_back(Triangle(v1,v2,v3));
+    //*/
     }
 
 }
