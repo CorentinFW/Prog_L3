@@ -54,7 +54,7 @@ void main (void) {
     vec3 Ps = gl_LightSource[0].position.xyz;
     vec4 Isd = gl_LightSource[0].diffuse;
     vec4 Kd = gl_FrontMaterial.diffuse;
-    float LNdot = max(0.f,dot(N,normalize(Ps-P)));
+    float LNdot = max(0.f,dot(N,normalize(Ps-P)));//remplacer
 
     for(int i = 0;i<levels;i++){
         if(LNdot > (1.0-(pas*float(i+1)))){
@@ -72,7 +72,7 @@ void main (void) {
     //reflexion speculaire
     vec4 Iss = gl_LightSource[0].specular;
     vec4 Ks = gl_FrontMaterial.specular;
-    vec3 R = 2.f*LNdot*N-normalize(Ps-P);
+    vec3 R = 2.f*LNdot*N-normalize(Ps-P);//remplacer
     vec4 Is = Iss * Ks *  pow(max(0.f,dot(normalize(R),V)),shininess);
     I += Is * specularRef;
     
@@ -84,7 +84,7 @@ void main (void) {
     vec3 Ps = gl_LightSource[i].position.xyz;
     vec4 Isd = gl_LightSource[i].diffuse;
     vec4 Kd = gl_FrontMaterial.diffuse;
-    float LNdot = max(0.f,dot(N,normalize(Ps-P)));
+    float LNdot = max(0.f,dot(N,normalize(Ps-P))); //remplacer
     vec4 Id = Isd * Kd * LNdot;
 
     I += Id * diffuseRef;
@@ -93,7 +93,7 @@ void main (void) {
     //reflexion speculaire
     vec4 Iss = gl_LightSource[i].specular;
     vec4 Ks = gl_FrontMaterial.specular;
-    vec3 R = 2.f*LNdot*N-normalize(Ps-P);
+    vec3 R = 2.f*LNdot*N-normalize(Ps-P);//remplacer
     vec4 Is = Iss * Ks *  pow(max(0.f,dot(normalize(R),V)),shininess);
     I += Is * specularRef;
     }
