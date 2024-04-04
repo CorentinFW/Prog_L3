@@ -49,7 +49,7 @@ void *participant(void *p) {
     }
     pthread_mutex_unlock(&predicat->lock);
 
-    // RdV
+    // RdV en trop car barriere fais deja tout 
     pthread_mutex_lock(&predicat->lock);
     predicat->count++;
     printf("Thread %d : Atteint le point de rendez-vous.\n", args->idThread);
@@ -60,6 +60,7 @@ void *participant(void *p) {
         printf("Thread %d : Attendre le rendez-vous.\n", args->idThread);
         pthread_cond_wait(&predicat->cond, &predicat->lock);
     }
+    // en trop
 
     // Reprise et poursuite de l'exécution
     printf("Thread %d : Reprise et poursuite de l'exécution.\n", args->idThread);
