@@ -32,13 +32,13 @@ apply is_perm_refl.
 Qed.
 
 
-Inductive est_trier : list nat -> Prop :=
-| est_trier_vide : est_trier []
-| est_trier_singleton : forall x : nat, est_trier [x]
+Inductive is_sorted : list nat -> Prop :=
+| est_trier_vide : is_sorted []
+| est_trier_singleton : forall x : nat, is_sorted [x]
 | est_trier_cons : forall (x y : nat) (l : list nat),
-    x <= y -> est_trier (y :: l) -> est_trier (x :: y :: l).
+    x <= y -> is_sorted (y :: l) -> is_sorted (x :: y :: l).
 
-Lemma exemple_est_trier : est_trier [1; 2; 3; 4].
+Lemma exemple_est_trier : is_sorted [1; 2; 3; 4].
 Proof.
   apply est_trier_cons. apply le_S. apply le_n.
   apply est_trier_cons. apply le_S. apply le_n.
@@ -107,11 +107,95 @@ Qed.
 
 (*2*)
 
+Lemma insert_is_perm : forall (x : nat) (l : list nat),
+is_perm (x::l) (insert x l).
+induction l.
+apply is_perm_sym.
+simpl.
+apply is_perm_refl.
+simpl.
+elim(le_dec x a0).
+intros.
+apply is_perm_refl.
+intros.
+apply(is_perm_trans (x :: a0 :: l) (a0 :: x :: l)).
+apply head_is_perm.
+apply is_perm_cons.
+apply IHl.
+Qed.
 
+(*3*)
+Lemma insert_is_sorted : forall (x : nat) (l : list nat),
+is_sorted l -> is_sorted (insert x l).
+intros.
+elim H.
+simpl.
+apply est_trier_singleton.
+intros.
+simpl.
+elim(le_dec x x0).
+intros.
+apply est_trier_cons.
+apply a0.
+apply est_trier_singleton.
+intros.
+apply est_trier_cons.
+lia. (*solveur de preuve arithmetique*)
+apply est_trier_singleton.
+simpl.
+intro.
+intro.
+elim(le_dec).
+intros.
+elim(le_dec).
+intro.
+apply est_trier_cons.
+lia.
+apply est_trier_cons.
+lia.
+apply H1.
+intro.
+apply est_trier_cons.
+lia.
+apply H2.
+intros.
+elim le_dec.
+intros.
+apply est_trier_cons.
+lia.
+apply est_trier_cons.
+lia.
+apply H1.
+intros.
+apply est_trier_cons.
+lia.
+apply H2.
+Qed.
 
-
-
-
-
-
+(*4*)
+Lemma isort_correct : forall (l l' : list nat), (*induction sur la liste l*)
+l' = isort l -> is_perm l l' /\ is_sorted l'.
+induction l.
+intros.
+split.
+rewrite H. (* rewrite quand y une égalité *)
+simpl.
+apply is_perm_refl.
+rewrite H.
+simpl.
+apply est_trier_vide.
+intros.
+rewrite H.
+simpl.
+elim (IHl (isort l)).
+intros.
+split.
+apply is_perm_trans with (a0 :: (isort l)).
+apply is_perm_cons.
+apply H0.
+apply insert_is_perm.
+apply insert_is_sorted.
+assumption.
+reflexivity.
+Qed.
 
