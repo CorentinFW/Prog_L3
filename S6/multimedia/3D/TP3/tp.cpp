@@ -191,15 +191,44 @@ void updateAnimation (){
     // Normaliser les poids : i.e. diviser chaque poids par la somme des poids
     //A completer
 
+    //exo 1 
+    // for(unsigned int i = 0; i < V.size(); i++){
+    //     V[i].setPosition((1-w1)*V0[i].getPosition() + w1*V1[i].getPosition());
+    // }
+
+    //exo 2 
+    
+    for(unsigned int i = 0; i < V.size(); i++){
+        V[i].setPosition(((w0*V0[i].getPosition()) + (w1*V1[i].getPosition()) + (w2*V2[i].getPosition()))/(w0+w1+w2));
+        }
+
     //Ajouter des transformation
     //Translation a mettre a jour en utilisant la variable offset
-    Vec3 translation(0.,0.,0.); // A mettre à jour
-
+    Vec3 translation(offset,0.5*cos(angle),0.); // A mettre à jour
+    //Exo 4 
+    w0 = cos(angle);
     //Matrices de rotation
     Mat3 Rx, Ry, Rz;
 
     //Mettre a jour Rx pour avoir une rotation atour de l'axe x de angle
-    // A completer
+    // Exo 3 
+    Rx(0,0) = 1;
+    Rx(1,1) = cos(angle);
+    Rx(1,2) = -sin(angle);
+    Rx(2,1) = sin(angle);
+    Rx(2,2) = cos(angle);
+
+    Ry(0,0) = cos(angle);
+    Ry(0,2) = sin(angle);
+    Ry(1,1) = 1;
+    Ry(2,0) = -sin(angle);
+    Ry(2,2) = cos(angle);
+
+    Rz(0,0) = cos(angle);
+    Rz(0,1) = -sin(angle);
+    Rz(1,0) = sin(angle);
+    Rz(1,1) = cos(angle);
+    Rz(2,2) = 1;
 
     //Mettre a jour Ry pour avoir une rotation atour de l'axe y de angle
 
@@ -208,6 +237,10 @@ void updateAnimation (){
     //Matrice rotation appliquer au resulat
     //tester votre matrices en utilisant la matrice model
     Mat3 rotation = Mat3::Identity();
+    rotation = Rx * Ry * Rz;
+    for(unsigned int i = 0; i < V.size(); i++){
+        V[i].setPosition(rotation * V[i].getPosition()+translation);
+    }
 
     //Recalcule des normales et mise à jour de l'affichage
     current_mesh.recomputeSmoothVertexNormals(0);
@@ -402,6 +435,10 @@ void idle () {
     static float lastTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     static unsigned int counter = 0;
     counter++;
+        interpolant1 = std::max( interpolant1 - 0.01f, 0.0f);
+        angle += 0.1f;
+        updateAnimation();
+    
     float currentTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     if (currentTime - lastTime >= 1000.0f) {
         FPS = counter;
@@ -513,6 +550,17 @@ void key (unsigned char keyPressed, int x, int y) {
         break;
     case '-':
         offset -= 0.01f;
+        updateAnimation();
+        break;
+
+    case 'M':
+        offset += 0.01f;
+        angle += 0.1f;
+        updateAnimation();
+        break;
+    case 'm':
+        offset -= 0.01f;
+        angle -= 0.1f;
         updateAnimation();
         break;
 
