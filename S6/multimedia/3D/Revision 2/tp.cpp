@@ -219,19 +219,33 @@ void buildModel(Mesh & o_mesh, unsigned int n=10, float radius=0.5, float height
     // Utiliser l'équation d'un cercle pour les bases de la forme
     //Vous utiliserez le rayon radius et la forme doit avoir une hauteur de height et être centrée en zéro
     for(int i = 0;i<=n;i++){
-        float theta = ((2.0 * M_PI) /n)* i;
+        float theta = ((2.0 * M_PI*i) /n);
         float x = cos(theta) * radius;
         float z = sin(theta)* radius;
         V.push_back(Vec3(x,height/2,z));
     }
 
+    for(int i = 0;i<=n;i++){
+        float theta = ((2.0 * M_PI*i) /n);
+        float x = cos(theta) * radius;
+        float z = sin(theta)* radius;
+        V.push_back(Vec3(-x,-height/2,-z));
+    }
 
     //Creer les triangles du corps du diabolo
     for(int i = 0;i<=n;i++){
-        T.push_back(Triangle(i,1,0));
+        T.push_back(Triangle(i,i+1,0));
+    }
+    for(int i = 0;i<=n;i++){
+        T.push_back(Triangle(i+1+n,0,i+n+2));
     }
     //Creer les triangles des bases (cercles)
-
+    for(int i = 0;i<=n;i++){
+        T.push_back(Triangle(i,1,i+1));
+    }
+    for(int i = 1;i<=n;i++){
+        T.push_back(Triangle(2+n,n+i,i+n+1));
+    }
 }
 
 //Construction du plan de la scène
