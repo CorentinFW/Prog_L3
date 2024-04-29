@@ -325,10 +325,10 @@ void updateAnimation (){
     Ry(2,2) = cos(angle);
 
 
-    Rz(0,0) = cos(angle);
-    Rz(0,1) = -sin(angle);
-    Rz(1,0) = sin(angle);
-    Rz(1,1) = cos(angle);
+    Rz(0,0) = cos(M_PI/2);
+    Rz(0,1) = -sin(M_PI/2);
+    Rz(1,0) = sin(M_PI/2);
+    Rz(1,1) = cos(M_PI/2);
     Rz(2,2) = 1;
 
     rotation = Rx*Rz;
@@ -581,6 +581,9 @@ void idle () {
     static float lastTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     static unsigned int counter = 0;
     counter++;
+    angle += 0.1f;
+        if( angle >= (float)M_PI*2.f ) angle = 0.;
+        updateAnimation();
     float currentTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     if (currentTime - lastTime >= 1000.0f) {
         FPS = counter;
@@ -708,11 +711,17 @@ void key (unsigned char keyPressed, int x, int y) {
 
     case 'M':
         n= n+ 1;
+        if (n <=0){
+            n = 1;
+        }
         buildModel(current_mesh,n);
         initGLList();
         break;
     case 'm':
         n = n-1;
+        if (n <=0){
+            n = 1;
+        }
         buildModel(current_mesh,n);
         initGLList();
         break;
