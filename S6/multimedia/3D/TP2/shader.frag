@@ -50,19 +50,20 @@ void main (void) {
     // gl_FrontMaterial.diffuse Matériaux diffus de l'objet
     // gl_FrontMaterial.specular Matériaux speculaire de l'objet
 
+//init toon link
     float pas = 1./float(levels);
     vec3 Ps = gl_LightSource[0].position.xyz;
     vec4 Isd = gl_LightSource[0].diffuse;
     vec4 Kd = gl_FrontMaterial.diffuse;
     float LNdot = max(0.f,dot(N,normalize(Ps-P)));//remplacer
-
+//cel shading (TOON LINK)
     for(int i = 0;i<levels;i++){
         if(LNdot > (1.0-(pas*float(i+1)))){
             LNdot = 1.0-(pas*float(i+1));
             break;
         }
     }
-
+// fin  
 
     vec4 Id = Isd * Kd * LNdot;
 

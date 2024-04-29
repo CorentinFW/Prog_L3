@@ -20,7 +20,6 @@
 //
 // --------------------------------------------------------------------------
 
-#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -40,6 +39,8 @@
 #include "src/Camera.h"
 
 using namespace std;
+
+int sommets=3;
 
 class PhongShader : public Shader {
 public:
@@ -114,7 +115,7 @@ static float specularRef = 0.4f;
 static float shininess = 30.0f;
 static float angle = 0.f;
 static float offset = 0.5f;
-int n = 10;
+
 
 
 typedef enum {Wire, Phong, Solid} RenderingMode;
@@ -207,104 +208,32 @@ inline void glDrawPoint (const Vertex & v) {
 //Exercice 1
 //Fonction à completer pour obtenir un dibolo constitué de 2 cones collés
 //soit en construisant 2 cones inversés soit en faisant un cylindre avec un rayon variable
-void buildModel(Mesh & o_mesh,unsigned int n, float radius=0.5, float height=1., unsigned int ny = 3 ){
-//carré brut : 
-/*
- V.push_back(Vec3(0, 0, 0));
-    V.push_back(Vec3(1, 0, 0));
-    V.push_back(Vec3(0, 1, 0));
-    V.push_back(Vec3(1, 1, 0));
-    V.push_back(Vec3(0, 0, 1));
-    V.push_back(Vec3(1, 0, 1));
-    V.push_back(Vec3(0, 1, 1));
-    V.push_back(Vec3(1, 1, 1));
-    
-    T.push_back(Triangle(0, 2, 1));
-    T.push_back(Triangle(1, 2, 3));
+void buildModel(Mesh & o_mesh, unsigned int n, float radius=0.5, float height=1., unsigned int ny = 3 ){
 
-    T.push_back(Triangle(6, 4, 5));
-    T.push_back(Triangle(6, 5, 7));
-
-    T.push_back(Triangle(2, 0, 4));
-    T.push_back(Triangle(6, 2, 4));
-
-    T.push_back(Triangle(1, 5, 3));
-    T.push_back(Triangle(3, 5, 7));
-
-    T.push_back(Triangle(3, 2, 6));
-    T.push_back(Triangle(7, 3, 6));
-
-    T.push_back(Triangle(4, 0, 1));
-    T.push_back(Triangle(4, 1, 5));
-
-*/
     std::vector<Vertex> & V = o_mesh.getVertices(); //Calculer les positions des sommets et les mettre dans le vecteur V
     std::vector<Triangle> & T = o_mesh.getTriangles(); //Discrétiser la forme et mettre les triangle dans le vecteur T
 
     V.clear();
     T.clear();
 
-    //A completer :
-    // Utiliser l'équation d'un cercle pour les bases de la forme
-    //Vous utiliserez le rayon radius et la forme doit avoir une hauteur de height et être centrée en zéro
-    
-    // V.push_back(Vec3(0,0,0));
-    // //coordonée poly sup 
-    // for(unsigned int i = 0;i <= n;i++){
-    //     float theta = (2.0*M_PI * i)/n;
-    //     float x = cos(theta) * radius;
-    //     float z = sin(theta) * radius;
-    //     V.push_back(Vec3(x,height/2,z));
-    // }
-    // //coordonée poly inf
-    // for(unsigned int i = 0;i <= n;i++){
-    //     float theta = (2.0*M_PI * i)/n;
-    //     float x = cos(theta) * radius;
-    //     float z = sin(theta) * radius;
-    //     V.push_back(Vec3(-x,-height/2,-z));
-    // }
+    V.push_back(Vec3(0,0,0)); 
 
-    // //Creer les triangles du corps du diabolo
-    // //sup
-    // for(unsigned int i = 0; i<=n;i++){
-    // T.push_back(Triangle(i,i+1,0));
-    // }
-    // //inf
-    // for(unsigned int i = 0; i<=n;i++){
-    // T.push_back(Triangle(n+i+1,0,n+2+i));
-    // }
-    // //Creer les triangles des bases (cercles)
-    // //sup
-    // for(unsigned int i = 0; i<=n;i++){
-    // T.push_back(Triangle(i,1,i+1));
-    // }
-    // //inf
-    // for(unsigned int i = 1; i<=n;i++){
-    // T.push_back(Triangle(2+n,n+i,i+1+n));
-    // }
-    
-    /*cylindre*/
-    for(unsigned int i = 0;i <= n;i++){
-        float theta = (2.0*M_PI * i)/n;
-        float x = cos(theta) * radius;
-        float z = sin(theta) * radius;
-        V.push_back(Vec3(x,height/2,z));
+    for(unsigned int i = 0; i <= n; ++i) {
+        float theta = (2 * M_PI * i) / n;
+        float x = radius * cos(theta);
+        float y = radius * sin(theta);
+        V.push_back(Vec3(-x, -height / 2, -y)); // Sommet du bas
     }
-    for(unsigned int i = 0;i <= n;i++){
-        float theta = (2.0*M_PI * i)/n;
-        float x = cos(theta) * radius;
-        float z = sin(theta) * radius;
-        V.push_back(Vec3(-x,-height/2,-z));
-    }
-    V.push_back(Vec3(0,height,0));
-    V.push_back(Vec3(0,-height,0));
 
-    for(unsigned int i = 0; i<=n;i++){
-    T.push_back(Triangle(i,1,i+1));
-    unsigned int next = (i+1) % n;
-    T.push_back(Triangle(,i*2,next*2));
+    //Creer les triangles du corps du diabolo
+    for(unsigned int i = 0; i <= n; i++) {
+        T.push_back(Triangle(i,(i+1),0));
     }
-    
+
+    //Creer les triangles des bases (cercles)
+    for(unsigned int i = 0;i <= n; i++){
+        T.push_back(Triangle(i,1,i+1));
+    }
 }
 
 //Construction du plan de la scène
@@ -356,29 +285,25 @@ void updateAnimation (){
 
     Mat3 Rx, Ry, Rz;
 
+    //Mettre a jour Rx pour avoir une rotation atour de l'axe x de angle
+    Rx(0, 0) = 1;
+    Rx(1, 1) = cos(M_PI/2);
+    Rx(1, 2) = -sin(M_PI/2);
+    Rx(2, 1) = sin(M_PI/2);
+    Rx(2, 2) = cos(M_PI/2);
+
+    //Mettre a jour Rz pour avoir une rotation atour de l'axe z de angle
+    Ry(0, 0) = cos(angle);
+    Ry(0, 2) = sin(angle);
+    Ry(1, 1) = 1;
+    Ry(2, 0) = -sin(angle);
+    Ry(2, 2) = cos(angle);
+
     Mat3 rotation = Mat3::Identity();
     //Mettre à jour la matrice de rotation pour effectuer une rotation de PI/2. autour de l'axe X
     //Ajouter ensuite une rotation autour de l'axe z de angle (la variable globale mise à jour par l'appuie sur R/r)
-    Rx(0,0) = 1;
-    Rx(1,1) = cos(angle);
-    Rx(1,2) = -sin(angle);
-    Rx(2,1) = sin(angle);
-    Rx(2,2) = cos(angle);
 
-    Ry(0,0) = cos(angle);
-    Ry(0,2) = sin(angle);
-    Ry(1,1) = 1;
-    Ry(2,0) = -sin(angle);
-    Ry(2,2) = cos(angle);
-
-
-    Rz(0,0) = cos(M_PI/2);
-    Rz(0,1) = -sin(M_PI/2);
-    Rz(1,0) = sin(M_PI/2);
-    Rz(1,1) = cos(M_PI/2);
-    Rz(2,2) = 1;
-
-    rotation = Rx*Rz;
+    rotation = Rx*Ry;
 
     for(  unsigned int i = 0 ; i < V.size() ; i++ ){
 
@@ -534,7 +459,6 @@ void setExercice( int numero ){
 
     if( numero == 1 ) {
         exercice = Modelisation;
-        buildModel(current_mesh,n);
         meshes.push_back(&current_mesh);
     }
     if( numero == 2 ) {
@@ -586,7 +510,7 @@ void init () {
 
     buildPlan(plan_mesh);
 
-    buildModel(current_mesh, n);
+    buildModel(current_mesh, sommets);
 
     meshes.push_back(&diabolo_mesh);
 
@@ -628,9 +552,6 @@ void idle () {
     static float lastTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     static unsigned int counter = 0;
     counter++;
-    // angle += 0.1f;
-    //     if( angle >= (float)M_PI*2.f ) angle = 0.;
-    //     updateAnimation();
     float currentTime = glutGet ((GLenum)GLUT_ELAPSED_TIME);
     if (currentTime - lastTime >= 1000.0f) {
         FPS = counter;
@@ -756,22 +677,17 @@ void key (unsigned char keyPressed, int x, int y) {
         }
         break;
 
-    case 'M':
-        n= n+ 1;
-        if (n <=0){
-            n = 1;
-        }
-        buildModel(current_mesh,n);
-        initGLList();
+    case ';':
+        sommets++;
+        buildModel(current_mesh,sommets);
+        setExercice(1);
         break;
-    case 'm':
-        n = n-1;
-        if (n <=0){
-            n = 1;
-        }
-        buildModel(current_mesh,n);
-        initGLList();
+    case ':':
+        sommets--;
+        buildModel(current_mesh,sommets);
+        setExercice(1);
         break;
+
     case '1':
         setExercice(1);
         break;

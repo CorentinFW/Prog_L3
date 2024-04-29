@@ -1,23 +1,23 @@
 // --------------------------------------------------------------------------
 // gMini,
-// a minimal Glut/OpenGL app to extend
+// a minimal Glut/OpenGL app to extend                              
 //
-// Copyright(C) 2007-2009
+// Copyright(C) 2007-2009                
 // Tamy Boubekeur
-//
-// All rights reserved.
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License (http://www.gnu.org/licenses/gpl.txt)
-// for more details.
-//
+//                                                                            
+// All rights reserved.                                                       
+//                                                                            
+// This program is free software; you can redistribute it and/or modify       
+// it under the terms of the GNU General Public License as published by       
+// the Free Software Foundation; either version 2 of the License, or          
+// (at your option) any later version.                                        
+//                                                                            
+// This program is distributed in the hope that it will be useful,            
+// but WITHOUT ANY WARRANTY; without even the implied warranty of             
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              
+// GNU General Public License (http://www.gnu.org/licenses/gpl.txt)           
+// for more details.                                                          
+//                                                                          
 // --------------------------------------------------------------------------
 
 uniform float ambientRef;
@@ -31,48 +31,66 @@ varying vec3 n;
 
 
 void main (void) {
-    vec3 P = vec3 (gl_ModelViewMatrix * p);
-    vec3 N = normalize (gl_NormalMatrix * n);
-    vec3 V = normalize (-P);
-
+    vec3 P = vec3 (gl_ModelViewMatrix * p); //Position du point à éclairer
+    vec3 N = normalize (gl_NormalMatrix * n); //Normal en ce point
+    vec3 V = normalize (-P); //Vecteur de vue
+    
     vec4 Isa = gl_LightModel.ambient;
     vec4 Ka = gl_FrontMaterial.ambient;
-    vec4 Ia = Isa*Ka;
+    vec4 Ia = Isa * Ka;
 
     vec4 I = ambientRef * Ia ;
 
-    for (int i = 0; i < 3; i++) {
+    ////////////////////////////////////////////////
+    //Eclairage de Phong à calculer en utilisant
+    ///////////////////////////////////////////////
+    // gl_LightSource[i].position.xyz Position de la lumière i
+    // gl_LightSource[i].diffuse Couleur diffuse de la lumière i
+    // gl_LightSource[i].specular Couleur speculaire de la lumière i
+    // gl_FrontMaterial.diffuse Matériaux diffus de l'objet
+    // gl_FrontMaterial.specular Matériaux speculaire de l'objet
 
-
-
-
-        vec4 Isd = gl_LightSource[i].diffuse;
-        vec4 Kd = gl_FrontMaterial.diffuse;
-
-        vec3 L = normalize (vec3(gl_ModelViewMatrix *gl_LightSource[i].position) - P);
-
-        float dotLN = max(dot (L, N), 0.);
-        if(dotLN >0.){
-            float spotCutOff = gl_LightSource[i].spotCosCutoff; //cosinus(angleCutOff)
-
-                   //TOON shading a completer
-
-
-            vec4 Id = Isd*Kd*dotLN;
-
-            vec4 Iss = gl_LightSource[i].specular;
-            vec4 Ks = gl_FrontMaterial.specular;
-
-            vec3 R = reflect (-L, N);
-
-            float dotRV = max(dot(R, V), 0.0);
-            vec4 Is = Iss*Ks*max (0.0, pow (dotRV, shininess));
-
-            I += diffuseRef * Id + specularRef * Is;
+//init toon link
+    float pas = 1./float(levels);
+    vec3 Ps = gl_LightSource[0].position.xyz;
+    vec4 Isd = gl_LightSource[0].diffuse;
+    vec4 Kd = gl_FrontMaterial.diffuse;
+    float LNdot = max(0.f,dot(N,normalize(Ps-P)));//remplacer
+//cel shading (TOON LINK)
+    for(int i = 0;i<levels;i++){
+        if(LNdot > (1.0-(pas*float(i+1)))){
+            LNdot = 1.0-(pas*float(i+1));
+            break;
         }
-
     }
+// fin  
 
-    gl_FragColor =vec4 (I.xyz, 1.);
+    vec4 Id = Isd * Kd * LNdot;
+
+    I += Id * diffuseRef;
+    //dot() produit scalaire
+    
+    
+    
+    
+    for(int i = 1;i<3;i++){
+    // lumiere diffuse
+    vec3 Ps = gl_LightSource[i].position.xyz;
+    vec4 Isd = gl_LightSource[i].diffuse;
+    vec4 Kd = gl_FrontMaterial.diffuse;
+    float LNdot = max(0.f,dot(N,normalize(Ps-P))); //remplacer
+    vec4 Id = Isd * Kd * LNdot;
+
+    I += Id * diffuseRef;
+    //dot() produit scalaire
+
+    //reflexion speculaire
+    vec4 Iss = gl_LightSource[i].specular;
+    vec4 Ks = gl_FrontMaterial.specular;
+    vec3 R = 2.f*LNdot*N-normalize(Ps-P);//remplacer
+    vec4 Is = Iss * Ks *  pow(max(0.f,dot(normalize(R),V)),shininess);
+    I += Is * specularRef;
+    }
+    gl_FragColor =vec4 (I.xyz, 1);
 }
 
