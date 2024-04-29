@@ -11,7 +11,10 @@ typedef struct Msg {
 } msg;
 
 int main(int argc, char * argv[]) {
-    key_t cle = ftok("./pourCle.txt", 10);
+        if(argc != 2){
+        perror("argument manquant, ou en trop");
+    }
+    key_t cle = ftok(argv[1], 10);
 
     int f_id = msgget(cle, 0);
 
