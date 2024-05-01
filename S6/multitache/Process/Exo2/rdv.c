@@ -12,10 +12,13 @@ int main(int argc, char * argv[]){
     printf("%s  fichier-pour-cle-ipc entier-pour-clef-ipc\n", argv[0]);
     exit(0);
   }
+//cle
 int cleSem=ftok(argv[1], atoi(argv[2]));
 printf("recup de la cle\n");
+//id
 int idSem = semget(cleSem, atoi(argv[3]), 0);
 printf("recup de l'idSem\n");
+//op 
 struct sembuf rdv = {0,-1,0}; // = P 
 printf("sembuf fait\n");
 int NewSem = semop(idSem,&rdv,1);
