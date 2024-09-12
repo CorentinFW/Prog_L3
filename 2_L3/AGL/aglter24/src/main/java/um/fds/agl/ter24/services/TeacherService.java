@@ -15,9 +15,15 @@ public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
 
+    public Optional<Teacher> getTeacher(final Long id) {
+        return teacherRepository.findById(id);
+    }
+
     public Iterable<Teacher> getTeachers() {
         return teacherRepository.findAll();
     }
+
+    public Teacher findByLastName(String name){return teacherRepository.findByLastName(name);}
 
     public void deleteTeacher(final Long id) {
         teacherRepository.deleteById(id);

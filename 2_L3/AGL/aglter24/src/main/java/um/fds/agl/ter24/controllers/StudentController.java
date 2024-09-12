@@ -1,6 +1,7 @@
 package um.fds.agl.ter24.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +37,8 @@ public class StudentController{
     @PostMapping(value = { "/addStudent"})
     public String addStudent(Model model, @ModelAttribute("StudentForm") StudentForm studentForm) {
         Student student;
-        if(studentService.getStudent(studentForm.getId()).isPresent()){
-            student = studentService.getStudent(studentForm.getId()).get();
+        if(studentService.findById(studentForm.getId()).isPresent()){
+            student = studentService.findById(studentForm.getId()).get();
             student.setFirstName(studentForm.getFirstName());
             student.setLastName(studentForm.getLastName());
         } else {
@@ -51,7 +52,7 @@ public class StudentController{
     @GetMapping(value = {"/showStudentUpdateForm/{id}"})
     public String showStudentUpdateForm(Model model, @PathVariable(value = "id") long id){
 
-        StudentForm studentForm = new StudentForm(id, studentService.getStudent(id).get().getFirstName(), studentService.getStudent(id).get().getLastName());
+        StudentForm studentForm = new StudentForm(id, studentService.findById(id).get().getFirstName(), studentService.findById(id).get().getLastName());
         model.addAttribute("studentForm", studentForm);
         return "updateStudent";
     }

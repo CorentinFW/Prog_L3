@@ -14,6 +14,10 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    public Optional<Student> getStudent(final Long id) {
+        return studentRepository.findById(id);
+    }
+
     public Iterable<Student> getStudents() {
         return studentRepository.findAll();
     }
@@ -27,7 +31,7 @@ public class StudentService {
         return savedStudent;
     }
 
-    public Optional<Student> getStudent(long id) {
+    public Optional<Student> findById(long id) {
         return studentRepository.findById(id);
     }
 }

@@ -38,6 +38,10 @@ public class Teacher extends UserTER {
                 '}';
     }
 
+    public String Name() {
+        return getFirstName() + ' ' + getLastName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
