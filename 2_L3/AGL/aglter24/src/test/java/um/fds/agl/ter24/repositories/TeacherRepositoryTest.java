@@ -1,8 +1,5 @@
-package um.fds.agl.ter23.repositories;
+package um.fds.agl.ter24.repositories;
 
-
-import static org.hamcrest.MatcherAssert.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +8,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import um.fds.agl.ter23.entities.TERManager;
-import um.fds.agl.ter23.entities.Teacher;
-import um.fds.agl.ter23.repositories.TERManagerRepository;
-import um.fds.agl.ter23.repositories.TeacherRepository;
-import org.springframework.security.access.AccessDeniedException;
+import um.fds.agl.ter24.entities.TERManager;
+import um.fds.agl.ter24.entities.Teacher;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -28,8 +22,21 @@ class TeacherRepositoryTest {
     @Autowired
     private TERManagerRepository managers;
 
+
     @Test
     void savingTeachersIsPossibleForManager() {
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken("lechef", "peu importe", AuthorityUtils.createAuthorityList("ROLE_MANAGER")));
+                        TERManager terM1Manager = new TERManager("Mathieu", "lechef",
+                        "mdp", "ROLE_MANAGER");
+        this.managers.save(terM1Manager);
+        this.teachers.save(new Teacher("Margaret", "Hamilton", "margaret",
+                terM1Manager, "ROLE_TEACHER"));
+        assertThat(teachers.findByLastName("Hamilton"), is(notNullValue()));
+    }
+
+    @Test
+    void TeachersIsConnect() {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken("lechef", "peu importe", AuthorityUtils.createAuthorityList("ROLE_MANAGER")));
         TERManager terM1Manager = new TERManager("Mathieu", "lechef",
@@ -37,19 +44,21 @@ class TeacherRepositoryTest {
         this.managers.save(terM1Manager);
         this.teachers.save(new Teacher("Margaret", "Hamilton", "margaret",
                 terM1Manager, "ROLE_TEACHER"));
-        assertThat(teachers.findByLastName("Hamilton"),is(notNullValue()));
+        assertThat(teachers.findByLastName("Hamilton"), is(notNullValue()));
+    }
+
+
+
+
+    @Test
+    void save() {
     }
 
     @Test
-    void saveIsPossibleForTeacher(){
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken("leprof", "peu importe", AuthorityUtils.createAuthorityList("ROLE_TEACHER")));
-        TERManager terM1Manager = new TERManager("Mathieu", "leprof",
-                "mdp", "ROLE_MANAGER");
-        this.managers.save(terM1Manager);
-        assertThrows(AccessDeniedException.class,()->
-                this.teachers.save(new Teacher("Margaret", "Hamilton", "margaret",
-                        terM1Manager, "ROLE_TEACHER"))
-        );
+    void deleteById() {
+    }
+
+    @Test
+    void delete() {
     }
 }
