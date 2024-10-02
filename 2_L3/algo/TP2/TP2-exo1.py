@@ -98,17 +98,31 @@ def elimination(F, n, b):
     psi=[]
     return psi
 
-def sat_backtrack(F, n):
-    if F == []:
-        return True
-    elif F == [[]]:
-        return False
-    else:
-        ff = elimination(F,n,-1)
-        fv = elimination(F,n,1)
-        return sat_backtrack(ff,n-1) and sat_backtrack(fv,n-1)
-    return None
+# def sat_backtrack(F, n):
+#     A = [1]*n
+#     if F == []:
+#         return True
+#     elif F == [[]]:
+#         return False
+#     else:
+#         ff = elimination(F,n,-1)
+#         fv = elimination(F,n,1)
+#         return sat_backtrack(ff,n-1) and sat_backtrack(fv,n-1)
+#     return None
 
+def sat_backtrack(F, n):
+    A = [1]*n
+    if F == []:
+        return A
+    for C in F:
+        if not C :
+            return False
+        for b in [-1,1]: 
+            ff = elimination(F,n,b)
+            A = sat_backtrack(ff,n-1)
+            if ff is not False:
+                return A+[b] 
+    return False
 ###############################################################################
 
 print("-------------------------------------------------------")
@@ -127,6 +141,5 @@ print(valide(F2, [-1,-1,1]))
 print("-------------------------------------------------------")
 print(test_aff_suivante(4))
 print("cocococococco-------------------------------------------------------")
-print(sat_exhau(F, n))
-print(sat_backtrack(F, n))
-print(elimination([[3,-2,1],[2,1],[1,1]], 2, -1))
+print(sat_exhau(F2, n2))
+print(sat_backtrack(F2, n2))
