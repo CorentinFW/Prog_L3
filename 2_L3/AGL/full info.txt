@@ -1,0 +1,40 @@
+git fetch <remote-repository-url>
+git rm README.md
+git merge FETCH_HEAD
+git commit -m "Fusion du projet avec suppression de mon README.md"
+git push origin <your-branch>
+
+git remote set-url origin [git@gitlab.etu.umontpellier.fr](mailto:git@gitlab.etu.umontpellier.fr):user/TD3.git
+
+avec readme : 
+
+git pull origin main --allow-unrelated-histories
+
+sans:
+
+git push --set-upstream origin --all
+
+
+Test Unitaire : 
+
+assertEquals = verifie equalite 
+
+assertThrows = verifie bien qu’une fonction renvoie bien une erreur, on ecrit de la forme :
+
+(erreur.class), () →{la fonction en question}
+
+@Autowired = init une unique instance de classe a ta place
+
+
+Test Integration : 
+
+@AutoConfigureMockMvc
+@WithMockUser(username = "Chef", roles = "MANAGER")
+//class ....
+//les mockMVC permette de simmuler un http et ça connexion 
+
+MvcResult result = mvc.perform(get("/addTeacher"))//permet de recup une adress
+                .andExpect(status().isOk())//verif sa valeur
+                .andExpect(content().contentType("text/html;charset=UTF-8"))//verif le type
+                .andExpect(view().name("addTeacher"))//verif qu'on est dans la bonne page
+                .andReturn();//renvoyer/le test final

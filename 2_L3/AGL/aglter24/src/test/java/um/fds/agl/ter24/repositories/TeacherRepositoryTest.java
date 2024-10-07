@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class TeacherRepositoryTest {
-    @Autowired
+    @Autowired//init une unique instance de classe a ta place
     private TeacherRepository teachers;
     @Autowired
     private TERManagerRepository managers;
