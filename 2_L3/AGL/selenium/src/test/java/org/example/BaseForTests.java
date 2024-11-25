@@ -1,9 +1,11 @@
-package fr.umfds.agl;
+package org.example;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -23,18 +25,21 @@ public class BaseForTests {
 
     @BeforeAll
     static void setup() {
-        System.setProperty("webdriver.gecko.driver","/home/e20200009072/tmp/geckodriver-v0.35.0-linux64/geckodriver"); // A reprendre ici !
+       // System.setProperty("webdriver.gecko.driver","/home/xxxVOTRE_HOMEDIRxxx/tmp/geckodriver-v0.35.0-linux64/geckodriver"); // A reprendre ici !
+        driver = new ChromeDriver();
     }
 
     @BeforeEach
     void init() {
-        FirefoxOptions options=new FirefoxOptions();//le usr sera peut etre a changer
-        FirefoxBinary binary=new FirefoxBinary(new File("/usr/lib/firefox/firefox"));// ici indiquer le chemin vers firefox (which ...)
-        options.setBinary(binary);
-        driver=new FirefoxDriver(options);
+
+        //FirefoxOptions options=new FirefoxOptions();
+        //FirefoxBinary binary=new FirefoxBinary(new File("/usr/bin/firefox"));// ici indiquer le chemin vers firefox (which ...)
+        //options.setBinary(binary);
+        //driver=new FirefoxDriver(options);
 //        driver = WebDriverManager.chromiumdriver().create();
         Duration d = Duration.ofSeconds(1);
         wait = new WebDriverWait(driver, d);
+        driver = new ChromeDriver();
 
     }
     @AfterEach

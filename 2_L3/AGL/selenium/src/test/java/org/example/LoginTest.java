@@ -1,4 +1,4 @@
-package fr.umfds.agl;
+package org.example;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
