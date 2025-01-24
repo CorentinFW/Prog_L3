@@ -8,7 +8,7 @@
 #include<string.h>
 
 /* Programme serveur */
-
+/* 32768 et ip 162.38.84.75 */
 int main(int argc, char *argv[]) {
 
   /* Je passe en paramètre le numéro de port qui sera donné à la socket créée plus loin.*/
