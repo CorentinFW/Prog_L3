@@ -1,0 +1,211 @@
+Parameters A B C : Prop.
+
+(*EXO 1 *)
+Print A.
+Goal A -> B -> A.
+Proof.
+intro.
+intro.
+apply H.
+Qed.
+
+Goal (A->B->C)->(A->B)->A->C.
+Proof.
+intro.
+intro.
+intro.
+apply H.
+apply H1.
+apply H0.
+apply H1.
+Qed.
+
+Goal A/\ B-> B.
+Proof.
+intro.
+destruct H.
+apply H0.
+Qed.
+
+Goal B -> A \/ B.
+Proof.
+intro.
+right.
+apply H.
+Qed.
+
+Goal (A\/B)->(A->C)->(B->C) -> C.
+Proof.
+intros.
+destruct H.
+apply H0.
+apply H.
+apply H1.
+apply H.
+Qed.
+
+Goal A -> False -> ~A.
+Proof.
+intros.
+intro.
+apply H0.
+Qed.
+
+Goal False -> A.
+intro.
+elim H.
+Qed.
+
+
+Goal (A<->B) -> A -> B.
+Proof.
+intro.
+intro.
+destruct H.
+apply H.
+apply H0.
+Qed.
+
+Goal (A<->B) -> B -> A.
+Proof.
+intros.
+destruct H.
+apply H1.
+apply H0.
+Qed.
+
+Goal (A->B)->(B->A)->(A<->B).
+Proof.
+intros.
+split.
+apply H.
+apply H0.
+Qed.
+
+(*Exo 2*)
+
+Parameter E : Set.
+Parameter P : E -> Prop.
+Parameter Q : E -> Prop.
+
+Goal forall x : E,P(x) -> exists y : E, P(y) \/Q(y).
+Proof.
+intro.
+intro.
+exists x.
+left.
+apply H.
+Qed.
+
+
+Goal (exists x :E,P(x) \/ Q(x)) -> (exists x : E,P(x)) \/ (exists x : E,Q(x)).
+Proof.
+intro.
+elim H.
+intro.
+intro.
+elim H0.
+intro.
+left.
+exists x .
+apply H1.
+intro.
+right.
+exists x.
+apply H1.
+Qed.
+
+(*3*)
+Goal (forall x:E,P(x)) /\ (forall x:E,Q(x)) -> forall x:E,P(x)/\Q(x).
+Proof.
+intro.
+intro.
+split.
+elim H.
+intros.
+apply H0.
+elim H.
+intros.
+apply H1.
+Qed.
+(*4*)
+
+Goal (forall x:E,P(x) /\ Q(x)) ->(forall x:E,P(x)) /\(forall x:E,Q(x)).
+Proof.
+intro.
+split.
+apply H.
+apply H.
+Qed.
+
+(*5*)
+
+Goal (forall x:E,~P(x)) -> ~(exists x:E,P(x)).
+Proof.
+intro.
+intro.
+elim H0.
+apply H.
+Qed.
+
+(*6*)
+
+Goal ~(forall x:E,P(x)) -> exists x:E,~P(x).
+Proof.
+Admitted.
+
+
+(*Exo 4*)
+
+Parameter R : E -> E-> Prop.
+(*1*)
+Goal (exists x :E,forall y:E,R(x)(y)) -> forall y:E,exists x:E,R(x)(y).
+intro.
+intro.
+elim H.
+intros.
+exists x.
+apply H0.
+Qed.
+
+(*2*)
+Goal (forall x :E,forall y:E,R(x)(y)) -> forall x:E,forall y:E,R(y)(x).
+Proof.
+intro.
+intro.
+intro.
+apply H.
+Qed.
+
+(*3*)
+Goal (exists x :E,exists y:E,R(x)(y)) -> exists x:E,exists y:E,R(x)(y).
+Proof.
+intro.
+elim H.
+intros.
+elim H0.
+intros.
+exists x.
+exists x0.
+apply H1.
+Qed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
