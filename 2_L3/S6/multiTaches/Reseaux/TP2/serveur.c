@@ -10,6 +10,36 @@
 
 /* Programme serveur */
 /* 32768 et ip 162.38.84.75 */
+//char *mesfin = (char*)malloc(tailleTCP)
+//memcpy permet de copier le msg hasardeux par le vrai créer 
+
+int recvTCP(int sock,void * msg){
+
+   int sizeMsg;
+   int tailleREC = recv(sock, &sizeMsg,sizeof(sizeMsg) , 0);
+   if (tailleREC == -1){
+    perror("Client : pb pour recevoir le msg :");
+    exit(1); // je choisis ici d'arrêter le programme car le reste
+	     // dépendent de la réussite de la création de la socket.
+  }
+
+   int tailleR = 0;
+   char * msgF =(char*)malloc(sizeMsg);
+   int tailleM = sizeMsg;
+
+   while (sizeMsg) {
+   int recu = recv(sock, &msgF + tailleR, tailleM - tailleR,0);
+   if (recu == -1){
+    perror("Client : pb pour envoyer le msg :");
+    exit(1); // je choisis ici d'arrêter le programme car le reste
+	     // dépendent de la réussite de la création de la socket.
+  }
+  memcpy(msg + strlen(msg),msgF,recu);
+  tailleR = tailleR + recu;
+   }
+   free(msgF);
+   return tailleR;
+}
 int main(int argc, char *argv[]) {
 
   /* Je passe en paramètre le numéro de port qui sera donné à la socket créée plus loin.*/
@@ -66,13 +96,16 @@ int main(int argc, char *argv[]) {
     exit(1); // je choisis ici d'arrêter le programme car le reste
 	     // dépendent de la réussite de la création de la socket.
   }
+   /*
    int tailleM;
    recv(dSC, &tailleM,sizeof(tailleM) , 0);
    printf("taille du futur message : %d",tailleM);
    char msg[200];
    recv(dSC, msg, sizeof(msg),0);
    printf("reçu : %s ",msg);
-
+*/
+   char msg[100];
+   recvTCP(ds, msg);
   /* Etape 5 : envoyer un message au serveur (voir sujet pour plus de détails)*/
   int r = strlen(msg)-1;
   send(dSC, &r, sizeof(r), 0);

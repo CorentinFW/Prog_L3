@@ -10,16 +10,29 @@
 
 /* Programme client */
 int sendTCP(int sock, void * msg, int sizeMsg){
-  msg[strlen(msg)] = '\0';
-  int tailleM = strlen(msg);
-  int envoieTaille = send(ds,&tailleM,sizeof(tailleM),0);
+  int tailleM = sizeMsg;
+  int tailleE = 0;
+  //envoie taille msg : 
+  printf("taille msg = %d\n",sizeMsg);
+  int envoieTaille = send(sock,&sizeMsg,sizeof(sizeMsg),0);
   if (envoieTaille == -1){
-    perror("Client : pb pour envoyer le msg :");
-    close(ds);
+    perror("Client : pb pour envoyer la taille du msg :");
     exit(1); // je choisis ici d'arrêter le programme car le reste
 	     // dépendent de la réussite de la création de la socket.
   }
-   }
+
+  //envoie le dit msg :
+  while (tailleE< sizeMsg) {
+    int envoieM = send(sock,((char *)msg + tailleE),tailleM - tailleE,0);
+    if (envoieM == -1){
+      perror("Client : pb pour envoyer le msg :");
+      exit(1); // je choisis ici d'arrêter le programme car le reste
+        // dépendent de la réussite de la création de la socket.
+    }
+    tailleE = tailleE + envoieM;
+  }
+  return tailleE;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -78,15 +91,8 @@ int main(int argc, char *argv[]) {
   fgets(msg,sizeof(msg),stdin);
   msg[strlen(msg)] = '\0';
   int tailleM = strlen(msg);
-  int envoieTaille = send(ds,&tailleM,sizeof(tailleM),0);
-  if (envoieTaille == -1){
-    perror("Client : pb pour envoyer le msg :");
-    close(ds);
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-	     // dépendent de la réussite de la création de la socket.
-  }
 
-  int envoie = send(ds,msg, strlen(msg)+1,0);
+  int envoie = sendTCP(ds,msg, strlen(msg));
 
   if (envoie == -1){
     perror("Client : pb pour envoyer le msg :");
