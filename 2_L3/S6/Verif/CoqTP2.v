@@ -90,16 +90,103 @@ Qed.
 
 
 (*Exo4*)
+Section Peano.
+Parameter N : Set.
+Parameter o : N.
+Parameter s : N -> N.
+Parameters plus mult : N -> N -> N.
+Variables x y : N.
+Axiom ax1 : ~((s x) = o).
+Axiom ax2 : exists z, ~(x = o) -> (s z) = x.
+Axiom ax3 : (s x) = (s y) -> x = y.
+Axiom ax4 : (plus x o) = x.
+Axiom ax5 : (plus x (s y)) = s (plus x y).
+Axiom ax6 : (mult x o) = o.
+Axiom ax7 : (mult x (s y)) = (plus (mult x y) x).
+End Peano.
+
+Goal (plus(s o) (s (s o))) = (s (s (s o))).
+Proof.
+rewrite ax5.
+rewrite ax5.
+rewrite ax4.
+reflexivity.
+Qed.
+
+Goal (plus (s (s o)) (s (s o))) = (s (s (s (s o ) ) ) ).
+Proof.
+rewrite ax5.
+rewrite ax5.
+rewrite ax4.
+reflexivity.
+Qed.
+
+Goal (mult (s ( s o)) (s (s o))) = (s (s (s (s o )))).
+Proof.
+rewrite ax7.
+rewrite ax7.
+rewrite ax6.
+rewrite ax5.
+rewrite ax5.
+rewrite ax4.
+rewrite ax5.
+rewrite ax5.
+rewrite ax4.
+reflexivity.
+Qed.
+
+Ltac Peano_tac := 
+  repeat(
+    try rewrite ax1;
+    try rewrite ax2;
+    try rewrite ax3;
+    try rewrite ax4;
+    try rewrite ax5;
+    try rewrite ax6;
+    try rewrite ax7;
+    try reflexivity
+  ).
+
+
+Lemma UnPlusDeuxEgalTrois2 : (plus (s o) (s (s o))) = (s (s (s o))).
+
+Proof.
+  Peano_tac.
+Qed.
+
+Lemma DeuxPlusDeuxEgalQuatre2 : (plus (s (s o)) (s (s o))) = (s (s (s (s o)))).
+
+Proof.
+  Peano_tac.
+Qed.
+
+Lemma DeuxFoisDeuxEgalQuatre2 : (mult (s (s o)) (s (s o))) = (s (s (s (s o)))).
+
+Proof.
+  Peano_tac.
+Qed.
 
 
 
+Hint Rewrite ax2 ax3 : negatif.
+Hint Rewrite ax7 ax6 : mults.
+Hint Rewrite ax5 ax4 : adds.
 
+Goal (plus (s o) (s (s o))) = (s (s (s o))).
+Proof.
+autorewrite with adds using try reflexivity.
+Qed.
 
+Goal (plus (s (s o)) (s (s o))) = (s (s (s (s o)))).
+Proof.
+autorewrite with adds using try reflexivity.
+Qed.
 
-
-
-
-
+Goal (mult (s (s o)) (s (s o))) = (s (s (s (s o)))).
+Proof.
+autorewrite with mults using try reflexivity.
+autorewrite with adds using try reflexivity.
+Qed.
 
 
 
