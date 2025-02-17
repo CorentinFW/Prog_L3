@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "arbin1.c"
+
                              /* les macros sont des blocs : pas de ';' apres */
 #define AVANCER {jeton=getchar();numcar++;}
 #define TEST_AVANCE(prevu) {if (jeton==(prevu)) AVANCER else ERREUR_SYNTAXE}
