@@ -6,7 +6,10 @@
 #include <stdlib.h>
 #include<arpa/inet.h>
 #include<string.h>
-
+/*
+Le hostname -I de archlinux :
+ip -4 addr show | grep "inet" | awk '{print $2}' | cut -d/ -f1
+*/
 int recvTCP(int sock,void * msg){
 
    int sizeMsg;
