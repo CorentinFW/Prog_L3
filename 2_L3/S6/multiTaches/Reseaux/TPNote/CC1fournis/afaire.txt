@@ -1,0 +1,14 @@
+Excellent ! Vos deux processus (celui fourni et le votre) sont enregistrés. 
+ L'etape suivante dans votre programme :
+ - recevoir une adresse d'une socket TCP sous la forme d'une structure struct sockaddr_in. Cette reception se fait via la socket UDP ; 
+ - terminer les echanges en UDP 
+ 
+ Ensuite : 
+ - creer une socket TCP cliente et envoyer une demande de connexion à l'addresse que vous venez de recevoir. 
+ - utiliser la socket TCP serveur que vous avez créée pour accepter la demande de connexion d'un client. 
+ 
+ A ce stade, votre programme est relié à deux autres processus : un client TCP et un serveur TCP. 
+ 
+ Ensuite : 
+ - recevoir et afficher la prochaine instruction emise par ce client TCP. Cette instruction est sous forme de chaine de caracteres (Indice : un entier (int) est à recevoir avant le texte de l'instruction).
+ Fin instruction

@@ -1,0 +1,57 @@
+Ce répertoire contient :
+------------------------
+
+- un fichier acompleter.c : il s'agit de l'unique fichier que vous
+devez modifier pour réaliser le travail demandé. Lire attentivement
+le contenu de ce fichier avant de commencer à travailler. Aucun
+autre fichier n'est à modifier.
+
+- un makefile pour compiler
+
+- un répertoire bin qui contient deux fichiers exécutables :
+
+	- site_fourni : un exécutable que vous devez lancer AVANT CHAQUE
+  	lancement de votre programme
+
+	- acompleter : l'exécutable de votre programme qui sera généré à la
+  	compilation
+
+- le reste sont des dépendances à ne pas modifier.
+
+
+
+Remarque : 
+----------
+
+Compiler et exécuter depuis le répertoire actuel.
+
+Pour compiler : 
+---------------
+
+make
+
+ou 
+
+make clean ; make
+
+Cette seconde option permet de faire le ménage avant de recompiler.
+
+Pour exécuter :
+---------------
+
+- Ouvrir deux terminaux.
+- Dans le premier terminal, commencer par exécuter :
+
+./bin/site_fourni
+
+Puis relancer avec les paramètres demandés
+
+- Dans le deuxième terminal, commencer par exécuter :
+
+./bin/acompleter 
+
+Puis relancer avec les paramètres demandés	
+
+RAPPEL : avant chaque exécution de votre programme, vous devez
+relancer le programme site_fourni
+
