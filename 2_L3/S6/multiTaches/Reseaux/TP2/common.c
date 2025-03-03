@@ -1,64 +1,72 @@
 #include "common.h"
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
 #include <stdlib.h>
-#include<arpa/inet.h>
-#include<string.h>
-/*
-Le hostname -I de archlinux :
-ip -4 addr show | grep "inet" | awk '{print $2}' | cut -d/ -f1
-*/
-int recvTCP(int sock,void * msg){
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
 
-   int sizeMsg;
-   int tailleREC = recv(sock, &sizeMsg,sizeof(sizeMsg) , 0);
-   if (tailleREC == -1){
-    perror("Client : pb pour recevoir le msg :");
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-	     // dépendent de la réussite de la création de la socket.
-  }
-
-   int tailleR = 0;
-   char * msgF =(char*)malloc(sizeMsg);
-   int tailleM = sizeMsg;
-
-   while (sizeMsg) {
-   int recu = recv(sock, &msgF + tailleR, tailleM - tailleR,0);
-   if (recu == -1){
-    perror("Client : pb pour envoyer le msg :");
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-	     // dépendent de la réussite de la création de la socket.
-  }
-  memcpy(msg + strlen(msg),msgF,recu);
-  tailleR = tailleR + recu;
+int recvTCP(int dsC, char* mesTCP, int sizeMsg){
+   int tailleTCP;
+   int restaille = recv(dsC, &tailleTCP, sizeof(tailleTCP),0);
+   if(restaille == -1){
+      perror("Erreur lors de la reception de la taille du message TCP");
+      exit(-1);
    }
-   free(msgF);
-   return tailleR;
+   printf("tailleTCP : %d\n",tailleTCP);
+   int tailleOriginal = tailleTCP;
+
+   if(sizeMsg < tailleTCP){
+      perror("La memoire alloue n'est pas assez grande pour recevoir ce message");
+      printf(" nb d'octet a recevoir : %d\n", tailleTCP);
+      exit(-1);
+   }
+   char* mesFin = (char*)malloc(tailleTCP + 1);
+      if (!mesFin) {
+      perror("Erreur d'allocation de mémoire");
+      exit(1);
+   }
+   printf("Message avant boucle : %s\n", mesFin);
+   int octectsEnvo = 0;
+   while(tailleTCP > octectsEnvo){
+      int resRecTCP = recv(dsC, mesFin + octectsEnvo, tailleTCP - octectsEnvo,0);
+      printf("Message recu dans boucle : %s\n", mesFin);
+      if(resRecTCP == -1){
+         perror("Erreur lors de la reception du message TCP");
+         free(mesFin);
+         exit(1);
+      }
+      printf("taille du message recu %d\n",resRecTCP);
+
+      octectsEnvo = octectsEnvo + resRecTCP;
+      printf("octectsEnvo Apres boucle %d\n", tailleTCP);
+
+      //strcat(mesTCP,mesFin);
+   }
+   mesFin[tailleOriginal] = '\0';
+   printf("message recu %s\n",mesFin);
+   memcpy(mesTCP, mesFin, tailleTCP+1);
+   free(mesFin);
+   return 1;
 }
 
-int sendTCP(int sock, void * msg, int sizeMsg){
-  int tailleM = sizeMsg;
-  int tailleE = 0;
-  //envoie taille msg : 
-  int envoieTaille = send(sock,&tailleM,sizeof(tailleM),0);
-  if (envoieTaille == -1){
-    perror("Client : pb pour envoyer le msg :");
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-	     // dépendent de la réussite de la création de la socket.
-  }
-
-  //envoie le dit msg :
-  while (sizeMsg) {
-  int envoieM = send(sock,(&tailleM+tailleE),tailleM - tailleE,0);
-  if (envoieM == -1){
-    perror("Client : pb pour envoyer le msg :");
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-	     // dépendent de la réussite de la création de la socket.
-  }
-  tailleE = tailleE + envoieTaille;
-  }
-  return tailleE;
+int sendTCP(int sock, void *msg, int sizeMsg){
+   int resSendTaille = send(sock,&sizeMsg,sizeof(sizeMsg),0);
+   if(resSendTaille==-1) {
+      perror("Erreur lors de l'envoi de la taille du message");
+      exit(-1);
    }
-
+   int tailleEnvoye = 0;
+   while(tailleEnvoye < sizeMsg){
+      int r = send(sock,(char*)msg + tailleEnvoye,sizeMsg-tailleEnvoye,0);
+      printf("taille du message envoye %d\n",r);
+      if(r==0) {
+         perror("Le serveur ne repond pas");
+         exit(-1);
+         }
+      if(r==-1) {
+         perror("Erreur lors de l'envoie du message");
+         exit(-1);
+      }
+      tailleEnvoye += r;
+   }
+   return tailleEnvoye;
+}

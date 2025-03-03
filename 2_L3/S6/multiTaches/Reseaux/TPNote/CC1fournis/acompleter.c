@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     printf("Erreur etape initiale : verifier les parametres de votre programme. Aussi pour rappel, le code fourni jusqu'à cet affichage ne doit pas être modifié !");
     exit(EXIT_FAILURE);
   }
-
+  
 
   /* votre travail commence à partir de là. */
 	
@@ -77,8 +77,9 @@ int main(int argc, char* argv[]) {
      message. En cas de problème, le message sera une notification
      d'erreur de démarrage */
   printf(" Aucune erreur avant instruction\n");
+
   
-  char instruction[2024];
+    char instruction[2024];
   socklen_t lgAdr = sizeof(ds_UDP);
   ssize_t resRec = recvfrom(ds_UDP,&instruction,sizeof(instruction),0,(struct sockaddr*)&ds_UDP,&lgAdr);
 if(resRec == -1){
@@ -89,87 +90,55 @@ else{
    printf("message reçu : %s\n",instruction);
 }
 
-printf("\n Suite du TP :\n\n");
-
-  int ds = socket(PF_INET, SOCK_STREAM, 0);
-
-  if (ds == -1){
-    perror("Serveur : pb creation socket :");
-    exit(1); 
-  }
-  
-  printf("Serveur : creation de la socket réussie \n");
-
-struct sockaddr_in ad;
-
-printf("debug recv\n");
-
-ssize_t resRecTCP = recvfrom(ds_UDP,&ad,sizeof(ad),0,(struct sockaddr*)&ds_UDP,sizeof(ds_UDP));
-  if(resRecTCP == -1){
-    perror("Erreur lors de la reception de l'adresse TCP");
+printf("Maintenant la phase TCP commence\n");
+struct sockaddr_in addrTCP;
+addrTCP.sin_family = AF_INET;
+socklen_t lgAdr2 = sizeof(addrTCP);
+ssize_t resRec2 = recvfrom(ds_UDP, &addrTCP, sizeof(addrTCP), 0, (struct sockaddr*)&ds_UDP, &lgAdr2);
+if (resRec2 == -1) {
+    perror("Erreur lors de la réception de l'adresse TCP");
     exit(1);
-  }
-printf("Serveur : creation de l'adresse TCP réussie \n");
-
-/*
-ad.sin_family = AF_INET;
-ad.sin_addr.s_addr = INADDR_ANY;
-ad.sin_port = htons((short)4200);
-*/
-
-int resNom = bind(ds, (struct sockaddr*)&ad, sizeof(ad));
-  if(resNom == -1){
-    perror("Erreur lors du nommage de la socket");
-    exit(1);
-  }
-  
-  printf("Serveur : nommage de la socket réussie \n");
-
-
-  
-  int dsClient = socket(PF_INET, SOCK_STREAM, 0);
-
-  if (dsClient == -1){
-    perror("Client : pb creation socket :");
-    exit(1);
-  }
-  
-  printf("Client : creation de la socket réussie \n");
-
-struct sockaddr_in adServ;
- adServ.sin_family = AF_INET;
-inet_pton(AF_INET, argv[2], &(adServ.sin_addr)); 
-adServ.sin_port = htons( (short) atoi(argv[3])); 
-int socklen_t_lgA = sizeof(struct sockaddr_in);
-
-int connexion = connect(dsClient, (struct sockaddr *) &adServ, socklen_t_lgA);
-if(connexion == -1){
-   perror("Erreur lors de la demande d'acces a la socket");
-   exit(1);
 }
+else {
+    printf("Adresse TCP reçue : %s:%d\n", inet_ntoa(addrTCP.sin_addr), ntohs(addrTCP.sin_port));
+}
+
+  
+
+
+// Créer une socket TCP cliente
+int ds_TCP_client = socket(PF_INET, SOCK_STREAM, 0);
+if (ds_TCP_client == -1) {
+    perror("Erreur création socket TCP client");
+    exit(EXIT_FAILURE);
+}
+     // Assurez-vous que la famille d'adresses est bien définie pour IPv4
+    addrTCP.sin_port = htons(ntohs(addrTCP.sin_port)); // Confirmer que le port est bien en format réseau
+
+// Connexion à la socket TCP du serveur
+int resConnect = connect(ds_TCP_client, (struct sockaddr*)&addrTCP, sizeof(addrTCP));
+if (resConnect == -1) {
+    perror("Erreur lors de la connexion TCP");
+    exit(EXIT_FAILURE);
+}
+else {
+    printf("Connexion à la socket TCP réussie !\n");
+}
+
 
 printf("Serveur : demande d'acces a la socket réussie \n");
 
+  close(lgAdr);
 
   int resCloseUDP = close(ds_UDP);
   if(resCloseUDP == -1){
-   perror("Erreur lors de la fermeture de la Socket");
-   exit(1);
-}
-  int resCloseTCP = close(ds_TCP);
-  if(resCloseTCP == -1){
-   perror("Erreur lors de la fermeture de la Socket");
-   exit(1);
-}
-  int resClose = close(ds);
-  if(resClose == -1){
-   perror("Erreur lors de la fermeture de la Socket");
+   perror("Erreur lors de la fermeture de la Socket UDP");
    exit(1);
 }
 
-  int resClose = close(dsClient);
-  if(resClose == -1){
-   perror("Erreur lors de la fermeture de la Socket");
+  int resCloseTCP = close(ds_TCP);
+  if(resCloseTCP == -1){
+   perror("Erreur lors de la fermeture de la Socket TCP");
    exit(1);
 }
   printf("CC : je termine\n");
