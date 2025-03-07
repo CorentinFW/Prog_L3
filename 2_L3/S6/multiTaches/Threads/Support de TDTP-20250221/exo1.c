@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#import "calcul.h"
 
  
 struct paramsFonctionThread {
@@ -24,7 +25,9 @@ void * fonctionThread (void * params){
   for(int i =0;i<10000;i++){
     printf("Thread %d : %d \n",args->idThread,i);
     pthread_mutex_lock(args->verrou);
+    calcul(10);
     *args->taskdoneShared = (*args->taskdoneShared) +1;
+
     pthread_mutex_unlock(args->verrou);
   }
   free(args);
