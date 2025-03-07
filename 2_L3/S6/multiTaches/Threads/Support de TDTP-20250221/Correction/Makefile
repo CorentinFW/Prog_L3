@@ -16,5 +16,6 @@ obj/%.o: %.c
 bin/serveur_MultiThreads: $(SRCS0:%.c=obj/%.o)
 	$(CC) $(CFLAGS) -o $@ $+ 
 # Nettoyage des fichiers objets et exécutables
+
 clean:	
 	rm -f $(BIN) obj/*.o *~
