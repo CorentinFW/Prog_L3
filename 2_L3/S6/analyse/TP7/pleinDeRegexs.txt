@@ -1,0 +1,8 @@
+abc /*Donne une concatenation*/
+a|bc /*Donne un arbre bien indenté*/
+a* /*Donne un * a */
+a|(b|c) /*Donne un arbre bien indenté*/
+a|b|c /*Donne un autre arbre bien indenté*/
+a  b  /*Ignore les espaces*/
+a/*Ignore les commentaires*/b
+a|(b|c)* /*Donne un arbre bien indenté*/
