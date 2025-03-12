@@ -13,7 +13,7 @@
 // char *mesfin = (char*)malloc(tailleTCP)
 // memcpy permet de copier le msg hasardeux par le vrai créer
 
-void *recvTCP(int sock, void *msg, int sizeMsg) {
+int recvTCP(int sock, void *msg, int sizeMsg) {
   int tailleR = 0;
   while (tailleR < sizeMsg) {
     int recu = recv(sock, &msg + tailleR, sizeMsg - tailleR, 0);
@@ -24,21 +24,51 @@ void *recvTCP(int sock, void *msg, int sizeMsg) {
     }
     tailleR = tailleR + recu;
   }
-  return msg;
+  return 1;
 }
 
-void *recvTailleEtMessageTCP(int sock) {
-  int tailleM;
-  int recT = recv(sock, &tailleM, sizeof(tailleM), 0);
-  if (recT == -1) {
-    perror("Client : pb pour recevoir la taille du msg");
-    exit(1); // je choisis ici d'arrêter le programme car le reste
-             // dépendent de la réussite de la création de la socket.
-  }
-  printf("taille du futur message : %d \n", tailleM);
-  void *msg = (void *)malloc(tailleM);
-  recvTCP(sock, msg, tailleM);
-  return msg;
+int recvTCP2(int dsC, void* mesTCP, int sizeOfTheMaximumMessageICanReceive) {
+  int tailleTCP;
+   int restaille = recv(dsC, &tailleTCP, sizeof(tailleTCP),0);
+   if(restaille == -1){
+      perror("Erreur lors de la reception de la taille du message TCP");
+      return -1;
+   }
+   printf("tailleTCP : %d\n",tailleTCP);
+   int tailleOriginal = tailleTCP;
+
+   if(sizeOfTheMaximumMessageICanReceive < tailleTCP){
+      perror("La memoire alloue n'est pas assez grande pour recevoir ce message");
+      printf(" nb d'octet a recevoir : %d\n", tailleTCP);
+      exit(-1);
+   }
+   char* mesFin = (char*)malloc(tailleTCP + 1);
+      if (!mesFin) {
+      perror("Erreur d'allocation de mémoire");
+      exit(1);
+   }
+   printf("Message avant boucle : %s\n", mesFin);
+   int octectsEnvo = 0;
+   while(tailleTCP > octectsEnvo){
+      int resRecTCP = recv(dsC, mesFin + octectsEnvo, tailleTCP - octectsEnvo,0);
+      printf("Message recu dans boucle : %s\n", mesFin);
+      if(resRecTCP == -1){
+         perror("Erreur lors de la reception du message TCP");
+         free(mesFin);
+         exit(1);
+      }
+      printf("taille du message recu %d\n",resRecTCP);
+
+      octectsEnvo = octectsEnvo + resRecTCP;
+      printf("octectsEnvo Apres boucle %d\n", tailleTCP);
+
+      //strcat(mesTCP,mesFin);
+   }
+   mesFin[tailleOriginal] = '\0';
+   printf("message recu %s\n",mesFin);
+   memcpy(mesTCP, mesFin, tailleTCP+1);
+   free(mesFin);
+   return 1;
 }
 
 int main(int argc, char *argv[]) {
@@ -106,8 +136,15 @@ int main(int argc, char *argv[]) {
   recv(dSC, msg, sizeof(msg),0);
   printf("reçu : %s ",msg);
 */
-  char msg[4];
-  void* msg2 = recvTCP(ds,msg,3);
+  char msg[400];
+  int msg2 = recvTCP2(dSC,&msg,sizeof(msg));
+  if (msg2 == -1) {
+    perror("Serveur : vote RN :");
+    close(dSC);
+    close(ds);
+    exit(1); // je choisis ici d'arrêter le programme car le reste
+             // dépendent de la réussite de la création de la socket.
+  }
   printf("voici le msg du client : %s \n",msg);
   /* Etape 5 : envoyer un message au serveur (voir sujet pour plus de détails)*/
   int r = strlen(msg) - 1;
