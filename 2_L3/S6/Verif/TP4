@@ -17,3 +17,5 @@ Definition double : nat->nat:= fun n : nat => nat_rec (fun n : nat=>nat) 0 (fun 
 
 Definition pred : nat->nat := fun n : nat=> nat_rec (fun n : nat=>nat) 0 (fun r v :nat => r) n.
 Check (pred 4).
+
+Definition plus : nat->nat->nat := fun n m: nat=>nat_rec (fun n : nat=>nat) m (fun r v : nat=> S v) n.
