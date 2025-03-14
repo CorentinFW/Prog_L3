@@ -1,0 +1,12 @@
+Vous pouvez maintenant lancer le programme 'acompleter'
+ 
+ - Bravo ! L'enregistrement des processus c'est bien passé. 
+ Voici l'étape 1 à réaliser :
+ - recevoir une adresse d'une socket TCP. Ce message est sous la forme d'une structure struct sockaddr_in. Cette reception se fait via la socket UDP ; 
+ - cloturer les echanges en UDP 
+ 
+ Ensuite : 
+ - creer une socket TCP cliente et envoyer une demande de connexion à l'addresse que vous venez de recevoir. 
+ - utiliser la socket TCP serveur créée et déjà nommée dans votre programme pour accepter la demande de connexion d'un client. 
+ 
+ je vous donne RdV sur cette fenetre à la fin de cette étape.
