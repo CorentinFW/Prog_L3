@@ -102,7 +102,19 @@ elim (le_dec x a).
 ++ intro.
 apply is_perm_refl.
 ++ intro.
-
+apply is_perm_sym.
+apply (is_perm_trans (a::insert x l) ( a::x::l)).
++++ apply (is_perm_cons a (insert x l) (x::l)).
+apply is_perm_sym.
+apply IHl.
++++ apply (is_perm_trans (a::x::l) ((x::l)++[a])).
+++++ apply (is_perm_avar a (x::l) (x::l)).
+apply is_perm_refl.
+++++ apply is_perm_sym.
+simpl.
+apply(is_perm_cons x (a :: l) (l ++ [a]) ).
+apply(is_perm_avar a l l).
+apply is_perm_refl.
 Qed.
 
 
