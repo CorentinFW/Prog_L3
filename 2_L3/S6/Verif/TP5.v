@@ -117,7 +117,79 @@ apply(is_perm_avar a l l).
 apply is_perm_refl.
 Qed.
 
+Lemma insert_is_sorted : forall (x : nat) (l : list nat), is_sorted l -> is_sorted (insert x l).
+Proof.
+intros.
+elim H.
++ simpl.
+apply is_sorted_un.
++intros.
+simpl.
+elim (le_dec x e).
+++intros.
+apply (is_sorted_cons).
+apply a.
+apply( is_sorted_un).
+++ intros.
+apply (is_sorted_cons).
+lia.
+apply (is_sorted_un).
++ simpl.
+intro.
+intro.
+elim (le_dec).
+++ intros.
+elim(le_dec).
+intro.
+apply is_sorted_cons.
+lia.
+apply is_sorted_cons.
+lia.
+apply H1.
+intro.
+apply is_sorted_cons.
+lia.
+apply H2.
+++ intros.
+elim le_dec.
+intros.
+apply is_sorted_cons.
+apply a.
+apply is_sorted_cons.
+apply H0.
+apply H1.
+intros.
+apply is_sorted_cons.
+apply H0.
+apply H2.
+Qed.
 
+
+Lemma isort_correct : forall (l l' : list nat), (*induction sur la liste l*)
+l' = isort l -> is_perm l l' /\ is_sorted l'.
+induction l.
+intros.
+split.
+rewrite H. (* rewrite quand y une égalité *)
+simpl.
+apply is_perm_refl.
+rewrite H.
+simpl.
+apply is_sorted_nil.
+intros.
+rewrite H.
+simpl.
+elim (IHl (isort l)).
+intros.
+split.
+apply is_perm_trans with (a :: (isort l)).
+apply is_perm_cons.
+apply H0.
+apply insert_is_perm.
+apply insert_is_sorted.
+assumption.
+reflexivity.
+Qed.
 
 
 
