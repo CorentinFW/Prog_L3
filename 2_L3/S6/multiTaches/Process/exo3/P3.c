@@ -26,24 +26,21 @@ int idMem = shmget(cle, nombre_zone*sizeof(int), 0666);
 
 
 struct sembuf opp;
-opp.sem_num=0;
+opp.sem_num=1;
 opp.sem_op=-1;
 opp.sem_flg=0;
 
 struct sembuf opv;
-opv.sem_num=0;
+opv.sem_num=1;
 opv.sem_op=+1;
 opv.sem_flg=0;
 
 struct sembuf opz;
-opz.sem_num= 0;
+opz.sem_num= 1;
 opz.sem_op=0;
 opz.sem_flg=0;
 
-struct sembuf opvSuiv;
-opvSuiv.sem_num = 1;
-opvSuiv.sem_op = +1;
-opvSuiv.sem_flg = 0;
+
 
 printf("avant de voler le semaphore \n");
 int op1 = semop(idSem,&opp,1);
@@ -71,12 +68,7 @@ if(op3 == -1){
     perror("erreur op3");
     exit(3);
 }
-printf("j'ai liberer le semaphore \n");
 
-int op4 = semop(idSem,&opvSuiv,1);
-if(op4 == -1){
-    perror("erreur op4");
-    exit(3);
-}
+printf("j'ai liberer le semaphore");
 
 }

@@ -2,12 +2,13 @@
 #~ définitions
 ########################################
 
-BIN= bin/init  bin/P1 bin/P2
+BIN= bin/init  bin/P1 bin/P2 bin/P3
 
 # liste des fichiers sources
 SRCS0=init.c
 SRCS1=P1.c
 SRCS2=P2.c
+SRCS3=P3.c
 
 default: $(BIN)
 
@@ -27,7 +28,8 @@ bin/P1: $(SRCS1:%.c=obj/%.o)
 bin/P2: $(SRCS2:%.c=obj/%.o)
 	g++ -o $@ $+
 
-
+bin/P3: $(SRCS3:%.c=obj/%.o)
+	g++ -o $@ $+
 
 clean:
 	rm -f $(BIN) obj/*.o *~
