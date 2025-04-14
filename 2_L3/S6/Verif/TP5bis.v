@@ -182,7 +182,7 @@ simpl.
 elim (IHl (isort l)).
 intros.
 split.
-apply is_perm_trans with (a :: (isort l)).
+apply (is_perm_trans (a::l) (a :: (isort l))).
 apply is_perm_cons.
 apply H0.
 apply insert_is_perm.
@@ -191,11 +191,25 @@ assumption.
 reflexivity.
 Qed.
 
+Require Import Classical.
 
 
-
-
-Lemma isort_correct : forall (l l1 : list nat), is_perm l l1 ∧ is_sorted l1 -> l1 = isort l.
+Lemma isort_complet : forall (l l1 : list nat), is_perm l l1 /\ is_sorted l1 -> l1 = isort l.
+Proof.
+intros.
+elim H.
+intros.
+induction l.
+simpl.
+elim H0.
+intros.
+reflexivity.
+intros.
+apply NNPP.
+intro.
+elimtype False.
+apply H4.
+Qed.
 
 
 
