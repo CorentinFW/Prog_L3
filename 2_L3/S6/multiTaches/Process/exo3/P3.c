@@ -48,11 +48,13 @@ if(op1 == -1){
     perror("erreur op1");
     exit(2);
 }
+/*
 int op2 = semop(idSem,&opz,1);
 if(op2 == -1){
     perror("erreur op2");
     exit(3);
 }
+*/
 
 printf("j'ai le semaphore \n");
 int* connect = (int*)shmat (idMem, NULL, 0);
@@ -62,13 +64,13 @@ int* connect = (int*)shmat (idMem, NULL, 0);
 printf("je suis attacher \n");
 int detachement = shmdt (connect);
 printf("je suis detacher \n");
-
+/*
 int op3 = semop(idSem,&opv,1);
 if(op3 == -1){
     perror("erreur op3");
     exit(3);
 }
-
-printf("j'ai liberer le semaphore");
+*/
+printf("j'ai liberer le semaphore \n");
 
 }

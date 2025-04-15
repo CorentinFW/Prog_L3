@@ -51,11 +51,12 @@ if(op1 == -1){
     perror("erreur op1");
     exit(2);
 }
+/* le Z ici peut servir mais le P est bloquant car on est a 0 et on finit a -1 apres le P, et dans ce cas P bloque
 int op2 = semop(idSem,&opz,1);
 if(op2 == -1){
     perror("erreur op2");
     exit(3);
-}
+}*/
 
 printf("j'ai le semaphore \n");
 int* connect = (int*)shmat (idMem, NULL, 0);
@@ -65,14 +66,14 @@ int* connect = (int*)shmat (idMem, NULL, 0);
 printf("je suis attacher \n");
 int detachement = shmdt (connect);
 printf("je suis detacher \n");
-
+/* en fait il passe a 0 pour continuer donc apres ce V il passe a 1 et donc si on relance un P2 cela peut produire un interblocage
 int op3 = semop(idSem,&opv,1);
 if(op3 == -1){
     perror("erreur op3");
     exit(3);
 }
 printf("j'ai liberer le semaphore \n");
-
+ */
 int op4 = semop(idSem,&opvSuiv,1);
 if(op4 == -1){
     perror("erreur op4");

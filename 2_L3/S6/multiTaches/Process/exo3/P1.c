@@ -45,9 +45,11 @@ int* connect = (int*)shmat (idMem, NULL, 0);
     for(int i = 0; i<nombre_zone;i++){
         connect[i] = (connect[i]+1)*10;
     };
+    
 printf("je suis attacher \n");
 int detachement = shmdt (connect);
 printf("je suis detacher \n");
+
 int op1 = semop(idSem,&opv,1);
 if(op1 == -1){
     perror("erreur op1");
